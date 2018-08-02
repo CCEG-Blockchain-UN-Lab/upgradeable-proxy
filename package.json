@@ -1,7 +1,7 @@
 {
   "name": "upgradeable-proxy",
   "version": "1.0.0",
-  "description": "This repository tests the upgradeable proxy pattern. It is a simplified version of the system being used by the [AragonOS](https://github.com/aragon/aragonOS), [Level K](https://github.com/levelkdev/master-storage) and [ZepplinOS](https://github.com/zeppelinos/core) systems. The core upgradeability pattern code has been copied and a few features have been removed.",
+  "description": "This implements https://github.com/jackandtheblockstalk/upgradeable-proxy as a npm package.",
   "main": "truffle.js",
   "directories": {
     "test": "test"
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jackandtheblockstalk/upgradeable-proxy.git"
+    "url": "git+https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy.git"
   },
   "author": "@jackandtheblockstalk",
   "license": "ISC",
