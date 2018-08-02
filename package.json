@@ -1,6 +1,6 @@
 {
   "name": "upgradeable-proxy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This implements https://github.com/jackandtheblockstalk/upgradeable-proxy as a npm package.",
   "main": "truffle.js",
   "directories": {
