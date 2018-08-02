@@ -2,3 +2,11 @@
 test/
 migrations/
 .idea/
+.gitignore
+.npmignore
+diagram1.jpg
+package.json
+package-lock.json
+README.md
+truffle.js
+truffle-config.js
