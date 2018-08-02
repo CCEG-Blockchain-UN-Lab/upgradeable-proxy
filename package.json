@@ -1,6 +1,6 @@
 {
   "name": "upgradeable-proxy",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "This implements https://github.com/jackandtheblockstalk/upgradeable-proxy as a npm package.",
   "main": "truffle.js",
   "directories": {
@@ -17,10 +17,10 @@
     "type": "git",
     "url": "git+https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy.git"
   },
-  "author": "@jackandtheblockstalk",
-  "license": "ISC",
+  "author": "ProphetDaniel",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jackandtheblockstalk/upgradeable-proxy/issues"
+    "url": "https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/issues"
   },
-  "homepage": "https://github.com/jackandtheblockstalk/upgradeable-proxy#readme"
+  "homepage": "https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy#readme"
 }
