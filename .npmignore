@@ -2,6 +2,7 @@
 test/
 migrations/
 .idea/
+contracts/Migrations.sol
 .gitignore
 .npmignore
 diagram1.jpg
