@@ -35,6 +35,7 @@ await uintSimpleV1byProxy.setValue(inputValue)
 let bigNumValue = await uintSimpleV1byProxy.getValue.call();
 ```
 
+### The upgrade
 And now you want to update to a second version of the contract called UintSimpleV2 with this [code](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/test/test-contracts/UintSimple/UintSimpleV2.sol).
 But instead importing from the relative path you import directly from the npm package that was just installed:
 ```javascript
