@@ -2,10 +2,13 @@ pragma solidity ^0.4.18;
 
 import '../Proxied.sol';
 import './SafeUpgradeable.sol';
+import '../CheckContract.sol';
 
 contract SafeProxy is Proxied {
 
-    constructor(address _target) public {
+    CheckContract checkContract;
+    constructor(address _target, CheckContract _checkContract) public {
+        checkContract = _checkContract;
         upgradeTo(_target);
     }
 
@@ -48,9 +51,7 @@ contract SafeProxy is Proxied {
      * @return true if the target is a contract
      */
     function isContract(address _target) internal view returns (bool) {
-        uint256 size;
-        assembly { size := extcodesize(_target) } // Note: the EXTCODESIZE may not work after Serenity hard fork
-        return size > 0;
+        return checkContract.isContract(_target);
     }
 
     /*
