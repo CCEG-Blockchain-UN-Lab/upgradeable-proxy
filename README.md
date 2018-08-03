@@ -6,6 +6,7 @@ Based on upgradeable proxy from Jack Tanner. More info [here](https://blog.indor
 - NPM package
 - Works around [truffle issue 700](https://github.com/trufflesuite/truffle/issues/700)
 - Test contracts moved to tests folder.
+- `SafeProxy`'s `isContract` check is now made inside an external `Upgradeable` smart contract called `CheckContract` so that when Serenity hard fork comes, there will be the possibility to fix breaking changes.
 
 ## Instalation
 ```bash
