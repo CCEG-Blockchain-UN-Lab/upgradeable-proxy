@@ -1,4 +1,56 @@
 # Upgradeable Proxy
+Based on upgradeable proxy from Jack Tanner. More info [here](https://blog.indorse.io/a-well-tested-guide-to-upgradeable-proxy-ethereum-smart-contracts-f4b5111c12b0).
+
+## Features
+
+- NPM package
+- Works around [truffle issue 700](https://github.com/trufflesuite/truffle/issues/700)
+- Test contracts moved to tests folder.
+
+## Instalation
+```bash
+npm install upgradeable-proxy
+```
+
+## Usage
+Imagine you have the first version of a contract called UintSimpleV1 with this [code](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/test/test-contracts/UintSimple/UintSimpleV1.sol).
+But instead importing from the relative path you import directly from the npm package that was just installed:
+```javascript
+import "upgradeable-proxy-plus/contracts/UpgradeablePlus.sol";
+```
+
+To deploy use the following strategy:
+```javascript
+let uintSimpleV1 = await UintSimpleV1.new();
+let proxy = await Proxy.new(uintSimpleV1.address);
+let uintSimpleV1byProxy = UintSimpleV1.at(proxy.address);
+await uintSimpleV1byProxy.initialize();
+```
+
+### Contract interaction
+To interact with the upgradeable contract, then simply call the contract methods like [test](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/test/UnitSimple.js#L25
+) indicates.
+```javascript
+await uintSimpleV1byProxy.setValue(inputValue)
+let bigNumValue = await uintSimpleV1byProxy.getValue.call();
+```
+
+And now you want to update to a second version of the contract called UintSimpleV2 with this [code](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/test/test-contracts/UintSimple/UintSimpleV2.sol).
+But instead importing from the relative path you import directly from the npm package that was just installed:
+```javascript
+import "upgradeable-proxy-plus/contracts/UpgradeablePlus.sol";
+```
+
+So next step is to deploy the second version of the contract first, then upgrade and finally initialize the proxy.
+```javascript
+let uintSimpleV2 = await UintSimpleV2.new();
+await uintSimpleV1byProxy.upgradeTo(uintSimpleV2.address);
+await uintSimpleV1byProxy.initialize();
+```
+
+Once that is done, the functionality called through the proxy contract will be the updated one.
+
+---
 
 This repository tests the upgradeable proxy pattern. It is a simplified version of the system being used by the
 [AragonOS](https://github.com/aragon/aragonOS), [Level K](https://github.com/levelkdev/master-storage) and [ZepplinOS](https://github.com/zeppelinos/core) systems. The core upgradeability pattern code has been copied and a few features have been removed.
