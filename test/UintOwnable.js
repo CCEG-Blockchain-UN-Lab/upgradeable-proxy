@@ -1,5 +1,4 @@
 const createOwnableProxyInfo = require("./helpers/createOwnableProxyInfo");
-const OwnableProxy = artifacts.require("OwnableProxy");
 const UintOwnableV1 = artifacts.require("UintOwnableV1");
 const UintOwnableV2 = artifacts.require("UintOwnableV2");
 
