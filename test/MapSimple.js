@@ -1,4 +1,4 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const MapSimpleV1 = artifacts.require("MapSimpleV1");
 const MapSimpleV2 = artifacts.require("MapSimpleV2");
 const MapSimpleV2b = artifacts.require("MapSimpleV2b");
@@ -6,7 +6,6 @@ const MapSimpleV2c = artifacts.require("MapSimpleV2c");
 
 contract("MapSimple", function(accounts) {
   let proxy,
-    mapSimpleV1,
     mapSimpleV2,
     mapSimpleV2b,
     mapSimpleV2c,
@@ -15,13 +14,12 @@ contract("MapSimple", function(accounts) {
     mapSimpleV2cbyProxy;
 
   beforeEach(async function() {
-    mapSimpleV1 = await MapSimpleV1.new();
     mapSimpleV2 = await MapSimpleV2.new();
     mapSimpleV2b = await MapSimpleV2b.new();
     mapSimpleV2c = await MapSimpleV2c.new();
-    let pi = await deployOnlyProxyFor(mapSimpleV1);
-    proxy = pi.proxy;
-    mapSimpleV1byProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(MapSimpleV1);
+    proxy = cnp.proxy;
+    mapSimpleV1byProxy = cnp.proxied;
     mapSimpleV2bbyProxy = MapSimpleV2b.at(proxy.address);
     mapSimpleV2cbyProxy = MapSimpleV2c.at(proxy.address);
     await mapSimpleV1byProxy.initialize();

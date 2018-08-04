@@ -12,7 +12,7 @@ contract("UintSimpleModular", function(accounts) {
   let proxy,
     uintSimpleModularV1,
     uintSimpleModularV2,
-    uintSimpleVModular1byProxy;
+    uintSimpleModular_byProxy;
 
   const inputValue = 10;
 
@@ -21,7 +21,7 @@ contract("UintSimpleModular", function(accounts) {
     uintSimpleModularV2 = await UintSimpleModularV2_Logic.new();
     let pi = await deployOnlyProxyFor(uintSimpleModularV1);
     proxy = pi.proxy;
-    uintSimpleModular_byProxy = UintSimpleModularV1_Logic.at(proxy.address);
+    uintSimpleModular_byProxy = pi.proxied;
     await uintSimpleModular_byProxy.initialize();
   });
 

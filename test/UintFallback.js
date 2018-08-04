@@ -1,4 +1,5 @@
 const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const UintFallbackV1 = artifacts.require("UintFallbackV1");
 const UintFallbackV2 = artifacts.require("UintFallbackV2");
 const UintFallbackV3 = artifacts.require("UintFallbackV3");
@@ -13,13 +14,13 @@ contract("UintFallback", function(accounts) {
     uintFallbackbyProxy;
 
   beforeEach(async function() {
-    uintFallbackV1 = await UintFallbackV1.new();
     uintFallbackV2 = await UintFallbackV2.new();
     uintFallbackV3 = await UintFallbackV3.new();
     uintFallbackV4 = await UintFallbackV4.new();
-    let pi = await deployOnlyProxyFor(uintFallbackV1);
-    proxy = pi.proxy;
-    uintFallbackbyProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(UintFallbackV1);
+    proxy = cnp.proxy;
+    uintFallbackbyProxy = cnp.proxied;
+    uintFallbackV1 = cnp.contract;
     await uintFallbackbyProxy.initialize();
   });
 

@@ -1,3 +1,4 @@
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const ArraySimpleV1a = artifacts.require("ArraySimpleV1a");
 const ArraySimpleV1b = artifacts.require("ArraySimpleV1b");
@@ -24,14 +25,14 @@ contract("ArraySimple", function(accounts) {
     inputValues2 = [12, 23, 34];
 
   beforeEach(async function() {
-    arraySimpleV1a = await ArraySimpleV1a.new();
     arraySimpleV1b = await ArraySimpleV1b.new();
     arraySimpleV2a = await ArraySimpleV2a.new();
     arraySimpleV2a_ExtraValue = await ArraySimpleV2a_ExtraValue.new();
     arraySimpleV2b = await ArraySimpleV2b.new();
-    let pi = await deployOnlyProxyFor(arraySimpleV1a);
-    proxy = pi.proxy;
-    arraySimplebyProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(ArraySimpleV1a);
+    proxy = cnp.proxy;
+    arraySimplebyProxy = cnp.proxied;
+    arraySimpleV1a = cnp.contract;
     arraySimpleV2a_ExtraValuebyProxy = ArraySimpleV2a_ExtraValue.at(
       proxy.address
     );
@@ -127,8 +128,7 @@ contract("ArraySimple", function(accounts) {
 
   it("should be able to upgrade a dynamic size array function", async function() {
     let pi = await deployOnlyProxyFor(arraySimpleV1b);
-    proxy = pi.proxy;
-    arraySimpleV1bbyProxy = pi.contract;
+    arraySimpleV1bbyProxy = pi.proxied;
     await arraySimpleV1bbyProxy.initialize();
 
     await arraySimpleV1bbyProxy.setValues(inputValues);
@@ -160,7 +160,7 @@ contract("ArraySimple", function(accounts) {
     );
     let pi = await deployOnlyProxyFor(arraySimpleV1b);
     proxy = pi.proxy;
-    arraySimpleV1bbyProxy = pi.contract;
+    arraySimpleV1bbyProxy = pi.proxied;
     await arraySimpleV1bbyProxy.initialize();
 
     await arraySimpleV1bbyProxy.setValues(inputValues);

@@ -14,7 +14,7 @@ contract("UintSimple", function(accounts) {
     uintSimpleV2 = await UintSimpleV2.new();
     let pi = await deployOnlyProxyFor(uintSimpleV1);
     proxy = pi.proxy;
-    uintSimpleV1byProxy = pi.contract;
+    uintSimpleV1byProxy = pi.proxied;
     await uintSimpleV1byProxy.initialize();
   });
 

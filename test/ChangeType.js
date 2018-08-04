@@ -1,4 +1,4 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const ChangeType_Uint = artifacts.require("ChangeType_Uint");
 const ChangeType_Uint8 = artifacts.require("ChangeType_Uint8");
 const ChangeType_Bool = artifacts.require("ChangeType_Bool");
@@ -16,7 +16,6 @@ const UINT8_MAX = web3
 
 contract("ChangeType", function(accounts) {
   let proxy,
-    changeType_Uint,
     changeType_Uint8,
     changeType_Bool,
     changeType_String,
@@ -24,14 +23,13 @@ contract("ChangeType", function(accounts) {
     changeTypebyProxy;
 
   beforeEach(async function() {
-    changeType_Uint = await ChangeType_Uint.new();
     changeType_Uint8 = await ChangeType_Uint8.new();
     changeType_Bool = await ChangeType_Bool.new();
     changeType_String = await ChangeType_String.new();
     changeType_Bytes32 = await ChangeType_Bytes32.new();
-    let pi = await deployOnlyProxyFor(changeType_Uint);
-    proxy = pi.proxy;
-    changeTypebyProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(ChangeType_Uint);
+    proxy = cnp.proxy;
+    changeTypebyProxy = cnp.proxied;
     await changeTypebyProxy.initialize();
   });
 

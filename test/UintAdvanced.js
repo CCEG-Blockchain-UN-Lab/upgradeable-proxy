@@ -1,4 +1,5 @@
 const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const UintAdvancedV1 = artifacts.require("UintAdvancedV1");
 const UintAdvancedV2a_NewFunction = artifacts.require(
   "UintAdvancedV2a_NewFunction"
@@ -126,7 +127,6 @@ contract("UintAdvanced", function(accounts) {
     inputValue3 = 32;
 
   beforeEach(async function() {
-    uintAdvancedV1 = await UintAdvancedV1.new();
     uintAdvancedV2a_NewFunction = await UintAdvancedV2a_NewFunction.new();
     uintAdvancedV2b_NewStorage = await UintAdvancedV2b_NewStorage.new();
     uintAdvancedV2c_NewEvent = await UintAdvancedV2c_NewEvent.new();
@@ -153,10 +153,11 @@ contract("UintAdvanced", function(accounts) {
     uintAdvancedV2x_Overloaded = await UintAdvancedV2x_Overloaded.new();
     uintAdvancedV2y_Overloaded = await UintAdvancedV2y_Overloaded.new();
 
-    let pi = await deployOnlyProxyFor(uintAdvancedV1);
-    proxy = pi.proxy;
+    let cnp = await deployContractAndProxyFor(UintAdvancedV1);
+    proxy = cnp.proxy;
+    uintAdvancedV1byProxy = cnp.proxied;
+    uintAdvancedV1 = cnp.contract;
 
-    uintAdvancedV1byProxy = pi.contract;
     uintAdvancedV2a_NewFunctionbyProxy = UintAdvancedV2a_NewFunction.at(
       proxy.address
     );

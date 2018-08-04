@@ -1,4 +1,4 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const UintEventV1 = artifacts.require("UintEventV1");
 const UintEventV2a_RemovedEvent = artifacts.require(
   "UintEventV2a_RemovedEvent"
@@ -9,7 +9,6 @@ const UintEventV2b_EventReordered = artifacts.require(
 
 contract("UintEvent", function(accounts) {
   let proxy,
-    uintEventV1,
     uintEventV2a_RemovedEvent,
     uintEventV2b_EventReordered,
     uintEventV1byProxy;
@@ -17,12 +16,11 @@ contract("UintEvent", function(accounts) {
   const inputValue = 10;
 
   beforeEach(async function() {
-    uintEventV1 = await UintEventV1.new();
     uintEventV2a_RemovedEvent = await UintEventV2a_RemovedEvent.new();
     uintEventV2b_EventReordered = await UintEventV2b_EventReordered.new();
-    let pi = await deployOnlyProxyFor(uintEventV1);
-    proxy = pi.proxy;
-    uintEventV1byProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(UintEventV1);
+    proxy = cnp.proxy;
+    uintEventV1byProxy = cnp.proxied;
     await uintEventV1byProxy.initialize();
   });
 

@@ -1,19 +1,18 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const AddressSimpleV1 = artifacts.require("AddressSimpleV1");
 const AddressSimpleV2 = artifacts.require("AddressSimpleV2");
 
 contract("AddressSimple", function(accounts) {
-  let proxy, addressSimpleV1, addressSimpleV2, addressSimpleV1byProxy;
+  let proxy, addressSimpleV2, addressSimpleV1byProxy;
 
   const inputValue = "0xa4532e9f6f9c4e4abb89bdbb73d3003210ede61c",
     inputValue2 = "0x5c28D962c93282C6Fbe820f9AB33844D96b4853e";
 
   beforeEach(async function() {
-    addressSimpleV1 = await AddressSimpleV1.new();
     addressSimpleV2 = await AddressSimpleV2.new();
-    let pi = await deployOnlyProxyFor(addressSimpleV1);
-    proxy = pi.proxy;
-    addressSimpleV1byProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(AddressSimpleV1);
+    proxy = cnp.proxy;
+    addressSimpleV1byProxy = cnp.proxied;
 
     await addressSimpleV1byProxy.initialize();
     target = await addressSimpleV1byProxy.target();

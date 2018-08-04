@@ -1,4 +1,5 @@
 const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const UintInitializeV1a_NotInitialized = artifacts.require(
   "UintInitializeV1a_NotInitialized"
 );
@@ -18,20 +19,15 @@ contract("UintInitialize", function(accounts) {
     uintInitializeV2,
     uintInitializebyProxy;
 
-  const inputValue = 10,
-    inputValue2 = 21,
-    inputValue3 = 32,
-    inputValue4 = 43;
-
   beforeEach(async function() {
-    uintInitializeV1a_NotInitialized = await UintInitializeV1a_NotInitialized.new();
     uintInitializeV1b_Initialized = await UintInitializeV1b_Initialized.new();
     uintInitializeV2 = await UintInitializeV2.new();
     uintInitializeV3 = await UintInitializeV3.new();
 
-    let pi = await deployOnlyProxyFor(uintInitializeV1a_NotInitialized);
-    proxy = pi.proxy;
-    uintInitializebyProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(UintInitializeV1a_NotInitialized);
+    proxy = cnp.proxy;
+    uintInitializebyProxy = cnp.proxied;
+    uintInitializeV1a_NotInitialized = cnp.contract;
     await uintInitializebyProxy.initialize();
   });
 
@@ -48,7 +44,7 @@ contract("UintInitialize", function(accounts) {
   it("should be initialize if the variable is set in initialize()", async function() {
     let pi = await deployOnlyProxyFor(uintInitializeV1b_Initialized);
     proxy = pi.proxy;
-    uintInitializebyProxy = pi.contract;
+    uintInitializebyProxy = pi.proxied;
     await uintInitializebyProxy.initialize();
 
     let value = await uintInitializebyProxy.getValue.call();
@@ -70,7 +66,7 @@ contract("UintInitialize", function(accounts) {
   it("should emmit EventInitialized when calling initialize()", async function() {
     let pi = await deployOnlyProxyFor(uintInitializeV1a_NotInitialized);
     proxy = pi.proxy;
-    uintInitializebyProxy = pi.contract;
+    uintInitializebyProxy = pi.proxied;
     let initializationTx = await uintInitializebyProxy.initialize();
     let events = initializationTx.logs;
     assert.equal(

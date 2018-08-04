@@ -1,16 +1,15 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const BoolSimpleV1 = artifacts.require("BoolSimpleV1");
 const BoolSimpleV2 = artifacts.require("BoolSimpleV2");
 
 contract("BoolSimple", function(accounts) {
-  let proxy, boolSimpleV1, boolSimpleV2, boolSimpleV1byProxy;
+  let proxy, boolSimpleV2, boolSimpleV1byProxy;
 
   beforeEach(async function() {
-    boolSimpleV1 = await BoolSimpleV1.new();
     boolSimpleV2 = await BoolSimpleV2.new();
-    let pi = await deployOnlyProxyFor(boolSimpleV1);
-    proxy = pi.proxy;
-    boolSimpleV1byProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(BoolSimpleV1);
+    proxy = cnp.proxy;
+    boolSimpleV1byProxy = cnp.proxied;
     await boolSimpleV1byProxy.initialize();
   });
 

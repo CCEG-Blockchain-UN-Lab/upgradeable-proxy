@@ -46,7 +46,7 @@ contract("UpgradeCheck", function(accounts) {
       await CheckContract.deployed()
     );
     checkContractInstanceByProxyAddress =
-      checkContractProxyInfo.contract.address;
+      checkContractProxyInfo.proxied.address;
 
     let canUpgradeProxyInfo = await deployOnlySafeProxyFor(
       checkContractInstanceByProxyAddress,
@@ -58,9 +58,9 @@ contract("UpgradeCheck", function(accounts) {
   });
 
   it("should be able to deploy SafeProxy with upgradeable contract target", async function() {
-    await SafeProxy.new(
-      upgradeCheck_CanUpgrade.address,
-      checkContractInstanceByProxyAddress
+    await deployOnlySafeProxyFor(
+      checkContractInstanceByProxyAddress,
+      upgradeCheck_CanUpgrade
     );
   });
 
@@ -83,9 +83,9 @@ contract("UpgradeCheck", function(accounts) {
 
   it("should not be able to deploy SafeProxy with non-upgradeable contract", async function() {
     try {
-      await SafeProxy.new(
-        upgradeCheck_CannotUpgrade.address,
-        checkContractInstanceByProxyAddress
+      await deployOnlySafeProxyFor(
+        checkContractInstanceByProxyAddress,
+        upgradeCheck_CannotUpgrade
       );
       throw new Error("This error should not happen");
     } catch (error) {
@@ -112,7 +112,10 @@ contract("UpgradeCheck", function(accounts) {
 
   it("should not be able to upgrade to a non-contract", async function() {
     try {
-      await SafeProxy.new(accounts[1], checkContractInstanceByProxyAddress);
+      await deployOnlySafeProxyFor(
+        checkContractInstanceByProxyAddress,
+        accounts[1]
+      );
       throw new Error("This error should not happen");
     } catch (error) {
       assert.equal(

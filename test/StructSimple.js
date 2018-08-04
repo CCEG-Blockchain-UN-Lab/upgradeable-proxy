@@ -1,4 +1,4 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const StructSimpleV1 = artifacts.require("StructSimpleV1");
 const StructSimpleV2 = artifacts.require("StructSimpleV2");
 const StructSimpleV2b = artifacts.require("StructSimpleV2b");
@@ -8,7 +8,6 @@ const INDENT = "      ";
 
 contract("StructSimple", function(accounts) {
   let proxy,
-    structSimpleV1,
     structSimpleV2,
     structSimpleV2b,
     structSimpleV2c,
@@ -16,13 +15,12 @@ contract("StructSimple", function(accounts) {
     structSimpleV2bbyProxy;
 
   beforeEach(async function() {
-    structSimpleV1 = await StructSimpleV1.new();
     structSimpleV2 = await StructSimpleV2.new();
     structSimpleV2b = await StructSimpleV2b.new();
     structSimpleV2c = await StructSimpleV2c.new();
-    let pi = await deployOnlyProxyFor(structSimpleV1);
-    proxy = pi.proxy;
-    structSimpleV1byProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(StructSimpleV1);
+    proxy = cnp.proxy;
+    structSimpleV1byProxy = cnp.proxied;
     structSimpleV2bbyProxy = StructSimpleV2b.at(proxy.address);
     await structSimpleV1byProxy.initialize();
   });

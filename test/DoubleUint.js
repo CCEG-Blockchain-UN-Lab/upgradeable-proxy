@@ -1,11 +1,11 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const DoubleUintV1 = artifacts.require("DoubleUintV1");
 const DoubleUintV2a_NewStorage = artifacts.require("DoubleUintV2a_NewStorage");
 
 const INDENT = "      ";
 
 contract("DoubleUint", function(accounts) {
-  let proxy, doubleUintV1, doubleUintV2a_NewStorage, doubleUintV1byProxy;
+  let proxy, doubleUintV2a_NewStorage, doubleUintV1byProxy;
 
   const inputValue = 10,
     inputValue2 = 21,
@@ -13,11 +13,10 @@ contract("DoubleUint", function(accounts) {
     inputValue4 = 43;
 
   beforeEach(async function() {
-    doubleUintV1 = await DoubleUintV1.new();
     doubleUintV2a_NewStorage = await DoubleUintV2a_NewStorage.new();
-    let pi = await deployOnlyProxyFor(doubleUintV1);
-    proxy = pi.proxy;
-    doubleUintV1byProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(DoubleUintV1);
+    proxy = cnp.proxy;
+    doubleUintV1byProxy = cnp.proxied;
     await doubleUintV1byProxy.initialize();
   });
 

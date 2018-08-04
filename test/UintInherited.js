@@ -1,4 +1,4 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const UintInheritedV1 = artifacts.require("UintInheritedV1");
 const UintInheritedV2 = artifacts.require("UintInheritedV2");
 
@@ -10,11 +10,11 @@ contract("UintInherited", function(accounts) {
   const inputValue = 10;
 
   beforeEach(async function() {
-    uintInheritedV1 = await UintInheritedV1.new();
     uintInheritedV2 = await UintInheritedV2.new();
-    let pi = await deployOnlyProxyFor(uintInheritedV1);
-    proxy = pi.proxy;
-    uintInheritedV1byProxy = pi.contract;
+    let cnp = await deployContractAndProxyFor(UintInheritedV1);
+    proxy = cnp.proxy;
+    uintInheritedV1byProxy = cnp.proxied;
+    uintInheritedV1 = cnp.contract;
     await uintInheritedV1byProxy.initialize();
   });
 
