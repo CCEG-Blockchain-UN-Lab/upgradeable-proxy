@@ -1,4 +1,5 @@
 const CheckContract = artifacts.require("CheckContract");
+const Proxy = artifacts.require("Proxy");
 const SafeProxy = artifacts.require("SafeProxy");
 const UpgradeCheck_CanUpgrade = artifacts.require("UpgradeCheck_CanUpgrade");
 const UpgradeCheck_CannotUpgrade = artifacts.require(
@@ -44,17 +45,25 @@ contract("UpgradeCheck", function(accounts) {
     upgradeCheckV3_CanUpgrade = result[4];
 
     checkContractAddress = (await CheckContract.deployed()).address;
+    let checkContractProxyInstance = await Proxy.new(checkContractAddress);
+    let checkContractInstanceByProxy = CheckContract.at(
+      checkContractProxyInstance.address
+    );
+    checkContractInstanceByProxyAddress = checkContractInstanceByProxy.address;
 
     safeProxy = await SafeProxy.new(
       upgradeCheck_CanUpgrade.address,
-      checkContractAddress
+      checkContractInstanceByProxyAddress
     );
     upgradeCheckbySafeProxy = UpgradeCheck_CanUpgrade.at(safeProxy.address);
     await upgradeCheckbySafeProxy.initialize();
   });
 
   it("should be able to deploy SafeProxy with upgradeable contract target", async function() {
-    await SafeProxy.new(upgradeCheck_CanUpgrade.address, checkContractAddress);
+    await SafeProxy.new(
+      upgradeCheck_CanUpgrade.address,
+      checkContractInstanceByProxyAddress
+    );
   });
 
   it("should upgrade to an upgradeable contract", async function() {
@@ -78,7 +87,7 @@ contract("UpgradeCheck", function(accounts) {
     try {
       await SafeProxy.new(
         upgradeCheck_CannotUpgrade.address,
-        checkContractAddress
+        checkContractInstanceByProxyAddress
       );
       throw new Error("This error should not happen");
     } catch (error) {
@@ -105,7 +114,7 @@ contract("UpgradeCheck", function(accounts) {
 
   it("should not be able to upgrade to a non-contract", async function() {
     try {
-      await SafeProxy.new(accounts[1], checkContractAddress);
+      await SafeProxy.new(accounts[1], checkContractInstanceByProxyAddress);
       throw new Error("This error should not happen");
     } catch (error) {
       assert.equal(
