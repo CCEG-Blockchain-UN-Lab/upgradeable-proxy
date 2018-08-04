@@ -1,4 +1,4 @@
-const createProxyInfo = require("./helpers/createProxyInfo");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const UintAdvancedV1 = artifacts.require("UintAdvancedV1");
 const UintAdvancedV2a_NewFunction = artifacts.require(
   "UintAdvancedV2a_NewFunction"
@@ -153,7 +153,7 @@ contract("UintAdvanced", function(accounts) {
     uintAdvancedV2x_Overloaded = await UintAdvancedV2x_Overloaded.new();
     uintAdvancedV2y_Overloaded = await UintAdvancedV2y_Overloaded.new();
 
-    let pi = await createProxyInfo(uintAdvancedV1);
+    let pi = await deployOnlyProxyFor(uintAdvancedV1);
     proxy = pi.proxy;
 
     uintAdvancedV1byProxy = pi.contract;
@@ -693,7 +693,7 @@ contract("UintAdvanced", function(accounts) {
     });
 
     it("should upgrade the contract UintAdvanced from version 2l with a function keyword pure changed to view", async function() {
-      let pi = await createProxyInfo(uintAdvancedV2l_ChangeKeyword);
+      let pi = await deployOnlyProxyFor(uintAdvancedV2l_ChangeKeyword);
       proxy = pi.proxy;
       uintAdvancedV1byProxy = UintAdvancedV1.at(proxy.address);
       await uintAdvancedV1byProxy.setValue(inputValue);

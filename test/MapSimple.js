@@ -1,4 +1,4 @@
-const createProxyInfo = require("./helpers/createProxyInfo");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const MapSimpleV1 = artifacts.require("MapSimpleV1");
 const MapSimpleV2 = artifacts.require("MapSimpleV2");
 const MapSimpleV2b = artifacts.require("MapSimpleV2b");
@@ -19,7 +19,7 @@ contract("MapSimple", function(accounts) {
     mapSimpleV2 = await MapSimpleV2.new();
     mapSimpleV2b = await MapSimpleV2b.new();
     mapSimpleV2c = await MapSimpleV2c.new();
-    let pi = await createProxyInfo(mapSimpleV1);
+    let pi = await deployOnlyProxyFor(mapSimpleV1);
     proxy = pi.proxy;
     mapSimpleV1byProxy = pi.contract;
     mapSimpleV2bbyProxy = MapSimpleV2b.at(proxy.address);

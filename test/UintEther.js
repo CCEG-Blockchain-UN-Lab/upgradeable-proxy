@@ -1,4 +1,4 @@
-const createProxyInfo = require("./helpers/createProxyInfo");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const UintEther_Normal = artifacts.require("UintEther_Normal");
 const UintEther_Payable = artifacts.require("UintEther_Payable");
 const UintEther_NotPayable = artifacts.require("UintEther_NotPayable");
@@ -14,7 +14,7 @@ contract("UintEther", function(accounts) {
     uintEther_Normal = await UintEther_Normal.new();
     uintEther_Payable = await UintEther_Payable.new();
     uintEther_NotPayable = await UintEther_NotPayable.new();
-    let pi = await createProxyInfo(uintEther_Normal);
+    let pi = await deployOnlyProxyFor(uintEther_Normal);
     proxy = pi.proxy;
     uintEtherbyProxy = UintEther_Payable.at(proxy.address);
     await uintEtherbyProxy.initialize();
@@ -31,7 +31,7 @@ contract("UintEther", function(accounts) {
   });
 
   it("should be able to send Ether to payable function in upgradeable contract that sets value to be the msg.value", async function() {
-    let pi = await createProxyInfo(uintEther_Payable);
+    let pi = await deployOnlyProxyFor(uintEther_Payable);
     proxy = pi.proxy;
     uintEtherbyProxy = pi.contract;
 
@@ -74,7 +74,7 @@ contract("UintEther", function(accounts) {
   });
 
   it("should be able to upgrade from non-payable to payble function", async function() {
-    let pi = await createProxyInfo(uintEther_NotPayable);
+    let pi = await deployOnlyProxyFor(uintEther_NotPayable);
     proxy = pi.proxy;
     uintEtherbyProxy = UintEther_Payable.at(proxy.address);
     await uintEtherbyProxy.initialize();

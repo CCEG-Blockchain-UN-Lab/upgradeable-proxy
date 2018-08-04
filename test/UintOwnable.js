@@ -1,4 +1,4 @@
-const createOwnableProxyInfo = require("./helpers/createOwnableProxyInfo");
+const deployOnlyOwnableProxyFor = require("./helpers/deployOnlyOwnableProxyFor");
 const UintOwnableV1 = artifacts.require("UintOwnableV1");
 const UintOwnableV2 = artifacts.require("UintOwnableV2");
 
@@ -10,7 +10,7 @@ contract("UintOwnable", function(accounts) {
   beforeEach(async function() {
     uintOwnableV1 = await UintOwnableV1.new();
     uintOwnableV2 = await UintOwnableV2.new();
-    let pi = await createOwnableProxyInfo(uintOwnableV1);
+    let pi = await deployOnlyOwnableProxyFor(uintOwnableV1);
     ownableProxy = pi.proxy;
     uintOwnableV1byProxy = pi.contract;
     await uintOwnableV1byProxy.initialize();

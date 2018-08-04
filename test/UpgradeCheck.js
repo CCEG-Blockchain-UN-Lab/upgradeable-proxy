@@ -1,7 +1,6 @@
-const createSafeProxyInfo = require("./helpers/createSafeProxyInfo");
-const createProxyInfo = require("./helpers/createProxyInfo");
+const deployOnlySafeProxyFor = require("./helpers/deployOnlySafeProxyFor");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const CheckContract = artifacts.require("CheckContract");
-const Proxy = artifacts.require("Proxy");
 const SafeProxy = artifacts.require("SafeProxy");
 const UpgradeCheck_CanUpgrade = artifacts.require("UpgradeCheck_CanUpgrade");
 const UpgradeCheck_CannotUpgrade = artifacts.require(
@@ -24,13 +23,10 @@ contract("UpgradeCheck", function(accounts) {
     upgradeCheck_CanUpgrade,
     upgradeCheck_CannotUpgrade,
     upgradeCheckV2_CanUpgrade,
-    upgradeCheckV2a_CannotUpgrade,
     upgradeCheckV2b_CannotUpgrade,
     upgradeCheckV3_CanUpgrade,
     upgradeCheckbySafeProxy,
     checkContractInstanceByProxyAddress;
-
-  const inputValue = 10;
 
   beforeEach(async function() {
     let result = await Promise.all([
@@ -46,13 +42,13 @@ contract("UpgradeCheck", function(accounts) {
     upgradeCheckV2b_CannotUpgrade = result[3];
     upgradeCheckV3_CanUpgrade = result[4];
 
-    let checkContractProxyInfo = await createProxyInfo(
+    let checkContractProxyInfo = await deployOnlyProxyFor(
       await CheckContract.deployed()
     );
     checkContractInstanceByProxyAddress =
       checkContractProxyInfo.contract.address;
 
-    let canUpgradeProxyInfo = await createSafeProxyInfo(
+    let canUpgradeProxyInfo = await deployOnlySafeProxyFor(
       checkContractInstanceByProxyAddress,
       upgradeCheck_CanUpgrade
     );

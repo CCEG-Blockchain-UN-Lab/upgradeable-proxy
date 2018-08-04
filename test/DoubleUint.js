@@ -1,4 +1,4 @@
-const createProxyInfo = require("./helpers/createProxyInfo");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const DoubleUintV1 = artifacts.require("DoubleUintV1");
 const DoubleUintV2a_NewStorage = artifacts.require("DoubleUintV2a_NewStorage");
 
@@ -15,7 +15,7 @@ contract("DoubleUint", function(accounts) {
   beforeEach(async function() {
     doubleUintV1 = await DoubleUintV1.new();
     doubleUintV2a_NewStorage = await DoubleUintV2a_NewStorage.new();
-    let pi = await createProxyInfo(doubleUintV1);
+    let pi = await deployOnlyProxyFor(doubleUintV1);
     proxy = pi.proxy;
     doubleUintV1byProxy = pi.contract;
     await doubleUintV1byProxy.initialize();

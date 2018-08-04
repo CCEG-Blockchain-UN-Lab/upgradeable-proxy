@@ -1,4 +1,4 @@
-const createProxyInfo = require("./helpers/createProxyInfo");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const ArraySimpleV1a = artifacts.require("ArraySimpleV1a");
 const ArraySimpleV1b = artifacts.require("ArraySimpleV1b");
 const ArraySimpleV2a = artifacts.require("ArraySimpleV2a");
@@ -29,7 +29,7 @@ contract("ArraySimple", function(accounts) {
     arraySimpleV2a = await ArraySimpleV2a.new();
     arraySimpleV2a_ExtraValue = await ArraySimpleV2a_ExtraValue.new();
     arraySimpleV2b = await ArraySimpleV2b.new();
-    let pi = await createProxyInfo(arraySimpleV1a);
+    let pi = await deployOnlyProxyFor(arraySimpleV1a);
     proxy = pi.proxy;
     arraySimplebyProxy = pi.contract;
     arraySimpleV2a_ExtraValuebyProxy = ArraySimpleV2a_ExtraValue.at(
@@ -126,7 +126,7 @@ contract("ArraySimple", function(accounts) {
   });
 
   it("should be able to upgrade a dynamic size array function", async function() {
-    let pi = await createProxyInfo(arraySimpleV1b);
+    let pi = await deployOnlyProxyFor(arraySimpleV1b);
     proxy = pi.proxy;
     arraySimpleV1bbyProxy = pi.contract;
     await arraySimpleV1bbyProxy.initialize();
@@ -158,7 +158,7 @@ contract("ArraySimple", function(accounts) {
       INDENT,
       "Note that smart contract array change arraySimpleV1a fails!!!"
     );
-    let pi = await createProxyInfo(arraySimpleV1b);
+    let pi = await deployOnlyProxyFor(arraySimpleV1b);
     proxy = pi.proxy;
     arraySimpleV1bbyProxy = pi.contract;
     await arraySimpleV1bbyProxy.initialize();

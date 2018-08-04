@@ -1,4 +1,4 @@
-const createProxyInfo = require("./helpers/createProxyInfo");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const UintInitializeV1a_NotInitialized = artifacts.require(
   "UintInitializeV1a_NotInitialized"
 );
@@ -29,7 +29,7 @@ contract("UintInitialize", function(accounts) {
     uintInitializeV2 = await UintInitializeV2.new();
     uintInitializeV3 = await UintInitializeV3.new();
 
-    let pi = await createProxyInfo(uintInitializeV1a_NotInitialized);
+    let pi = await deployOnlyProxyFor(uintInitializeV1a_NotInitialized);
     proxy = pi.proxy;
     uintInitializebyProxy = pi.contract;
     await uintInitializebyProxy.initialize();
@@ -46,7 +46,7 @@ contract("UintInitialize", function(accounts) {
   });
 
   it("should be initialize if the variable is set in initialize()", async function() {
-    let pi = await createProxyInfo(uintInitializeV1b_Initialized);
+    let pi = await deployOnlyProxyFor(uintInitializeV1b_Initialized);
     proxy = pi.proxy;
     uintInitializebyProxy = pi.contract;
     await uintInitializebyProxy.initialize();
@@ -68,7 +68,7 @@ contract("UintInitialize", function(accounts) {
   });
 
   it("should emmit EventInitialized when calling initialize()", async function() {
-    let pi = await createProxyInfo(uintInitializeV1a_NotInitialized);
+    let pi = await deployOnlyProxyFor(uintInitializeV1a_NotInitialized);
     proxy = pi.proxy;
     uintInitializebyProxy = pi.contract;
     let initializationTx = await uintInitializebyProxy.initialize();

@@ -1,4 +1,4 @@
-const createProxyInfo = require("./helpers/createProxyInfo");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const ChangeType_Uint = artifacts.require("ChangeType_Uint");
 const ChangeType_Uint8 = artifacts.require("ChangeType_Uint8");
 const ChangeType_Bool = artifacts.require("ChangeType_Bool");
@@ -29,7 +29,7 @@ contract("ChangeType", function(accounts) {
     changeType_Bool = await ChangeType_Bool.new();
     changeType_String = await ChangeType_String.new();
     changeType_Bytes32 = await ChangeType_Bytes32.new();
-    let pi = await createProxyInfo(changeType_Uint);
+    let pi = await deployOnlyProxyFor(changeType_Uint);
     proxy = pi.proxy;
     changeTypebyProxy = pi.contract;
     await changeTypebyProxy.initialize();

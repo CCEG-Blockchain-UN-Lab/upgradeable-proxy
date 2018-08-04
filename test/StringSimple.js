@@ -1,4 +1,4 @@
-const createProxyInfo = require("./helpers/createProxyInfo");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const StringSimpleV1 = artifacts.require("StringSimpleV1");
 const StringSimpleV2 = artifacts.require("StringSimpleV2");
 
@@ -11,7 +11,7 @@ contract("StringSimple", function(accounts) {
   beforeEach(async function() {
     stringSimpleV1 = await StringSimpleV1.new();
     stringSimpleV2 = await StringSimpleV2.new();
-    let pi = await createProxyInfo(stringSimpleV1);
+    let pi = await deployOnlyProxyFor(stringSimpleV1);
     proxy = pi.proxy;
     stringSimpleV1byProxy = pi.contract;
     await stringSimpleV1byProxy.initialize();
