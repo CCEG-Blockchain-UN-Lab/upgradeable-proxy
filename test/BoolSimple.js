@@ -1,8 +1,6 @@
-const Proxy = artifacts.require("Proxy");
+const createProxyInfo = require("./helpers/createProxyInfo");
 const BoolSimpleV1 = artifacts.require("BoolSimpleV1");
 const BoolSimpleV2 = artifacts.require("BoolSimpleV2");
-
-const INDENT = "      ";
 
 contract("BoolSimple", function(accounts) {
   let proxy, boolSimpleV1, boolSimpleV2, boolSimpleV1byProxy;
@@ -10,8 +8,9 @@ contract("BoolSimple", function(accounts) {
   beforeEach(async function() {
     boolSimpleV1 = await BoolSimpleV1.new();
     boolSimpleV2 = await BoolSimpleV2.new();
-    proxy = await Proxy.new(boolSimpleV1.address);
-    boolSimpleV1byProxy = BoolSimpleV1.at(proxy.address);
+    let pi = await createProxyInfo(boolSimpleV1);
+    proxy = pi.proxy;
+    boolSimpleV1byProxy = pi.contract;
     await boolSimpleV1byProxy.initialize();
   });
 

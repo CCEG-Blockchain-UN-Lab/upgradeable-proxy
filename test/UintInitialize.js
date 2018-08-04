@@ -1,4 +1,4 @@
-const Proxy = artifacts.require("Proxy");
+const createProxyInfo = require("./helpers/createProxyInfo");
 const UintInitializeV1a_NotInitialized = artifacts.require(
   "UintInitializeV1a_NotInitialized"
 );
@@ -29,8 +29,9 @@ contract("UintInitialize", function(accounts) {
     uintInitializeV2 = await UintInitializeV2.new();
     uintInitializeV3 = await UintInitializeV3.new();
 
-    proxy = await Proxy.new(uintInitializeV1a_NotInitialized.address);
-    uintInitializebyProxy = UintInitializeV1a_NotInitialized.at(proxy.address);
+    let pi = await createProxyInfo(uintInitializeV1a_NotInitialized);
+    proxy = pi.proxy;
+    uintInitializebyProxy = pi.contract;
     await uintInitializebyProxy.initialize();
   });
 
@@ -45,8 +46,9 @@ contract("UintInitialize", function(accounts) {
   });
 
   it("should be initialize if the variable is set in initialize()", async function() {
-    proxy = await Proxy.new(uintInitializeV1b_Initialized.address);
-    uintInitializebyProxy = UintInitializeV1b_Initialized.at(proxy.address);
+    let pi = await createProxyInfo(uintInitializeV1b_Initialized);
+    proxy = pi.proxy;
+    uintInitializebyProxy = pi.contract;
     await uintInitializebyProxy.initialize();
 
     let value = await uintInitializebyProxy.getValue.call();
@@ -66,8 +68,9 @@ contract("UintInitialize", function(accounts) {
   });
 
   it("should emmit EventInitialized when calling initialize()", async function() {
-    proxy = await Proxy.new(uintInitializeV1a_NotInitialized.address);
-    uintInitializebyProxy = UintInitializeV1a_NotInitialized.at(proxy.address);
+    let pi = await createProxyInfo(uintInitializeV1a_NotInitialized);
+    proxy = pi.proxy;
+    uintInitializebyProxy = pi.contract;
     let initializationTx = await uintInitializebyProxy.initialize();
     let events = initializationTx.logs;
     assert.equal(

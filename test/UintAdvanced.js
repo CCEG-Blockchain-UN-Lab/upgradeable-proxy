@@ -1,4 +1,4 @@
-const Proxy = artifacts.require("Proxy");
+const createProxyInfo = require("./helpers/createProxyInfo");
 const UintAdvancedV1 = artifacts.require("UintAdvancedV1");
 const UintAdvancedV2a_NewFunction = artifacts.require(
   "UintAdvancedV2a_NewFunction"
@@ -73,8 +73,6 @@ const UintAdvancedV2x_Overloaded = artifacts.require(
 const UintAdvancedV2y_Overloaded = artifacts.require(
   "UintAdvancedV2y_Overloaded"
 );
-
-const INDENT = "        ";
 
 contract("UintAdvanced", function(accounts) {
   let proxy,
@@ -155,9 +153,10 @@ contract("UintAdvanced", function(accounts) {
     uintAdvancedV2x_Overloaded = await UintAdvancedV2x_Overloaded.new();
     uintAdvancedV2y_Overloaded = await UintAdvancedV2y_Overloaded.new();
 
-    proxy = await Proxy.new(uintAdvancedV1.address);
+    let pi = await createProxyInfo(uintAdvancedV1);
+    proxy = pi.proxy;
 
-    uintAdvancedV1byProxy = UintAdvancedV1.at(proxy.address);
+    uintAdvancedV1byProxy = pi.contract;
     uintAdvancedV2a_NewFunctionbyProxy = UintAdvancedV2a_NewFunction.at(
       proxy.address
     );
@@ -694,7 +693,8 @@ contract("UintAdvanced", function(accounts) {
     });
 
     it("should upgrade the contract UintAdvanced from version 2l with a function keyword pure changed to view", async function() {
-      proxy = await Proxy.new(uintAdvancedV2l_ChangeKeyword.address);
+      let pi = await createProxyInfo(uintAdvancedV2l_ChangeKeyword);
+      proxy = pi.proxy;
       uintAdvancedV1byProxy = UintAdvancedV1.at(proxy.address);
       await uintAdvancedV1byProxy.setValue(inputValue);
       let value = await uintAdvancedV1byProxy.getValue.call();

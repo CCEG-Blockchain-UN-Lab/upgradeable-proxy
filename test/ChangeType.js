@@ -1,11 +1,9 @@
-const Proxy = artifacts.require("Proxy");
+const createProxyInfo = require("./helpers/createProxyInfo");
 const ChangeType_Uint = artifacts.require("ChangeType_Uint");
 const ChangeType_Uint8 = artifacts.require("ChangeType_Uint8");
 const ChangeType_Bool = artifacts.require("ChangeType_Bool");
 const ChangeType_String = artifacts.require("ChangeType_String");
 const ChangeType_Bytes32 = artifacts.require("ChangeType_Bytes32");
-
-const INDENT = "      ";
 
 const UINT256_MAX = web3
   .toBigNumber(2)
@@ -31,8 +29,9 @@ contract("ChangeType", function(accounts) {
     changeType_Bool = await ChangeType_Bool.new();
     changeType_String = await ChangeType_String.new();
     changeType_Bytes32 = await ChangeType_Bytes32.new();
-    proxy = await Proxy.new(changeType_Uint.address);
-    changeTypebyProxy = ChangeType_Uint.at(proxy.address);
+    let pi = await createProxyInfo(changeType_Uint);
+    proxy = pi.proxy;
+    changeTypebyProxy = pi.contract;
     await changeTypebyProxy.initialize();
   });
 

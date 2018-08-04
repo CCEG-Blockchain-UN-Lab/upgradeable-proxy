@@ -1,10 +1,8 @@
-const Proxy = artifacts.require("Proxy");
+const createProxyInfo = require("./helpers/createProxyInfo");
 const MapSimpleV1 = artifacts.require("MapSimpleV1");
 const MapSimpleV2 = artifacts.require("MapSimpleV2");
 const MapSimpleV2b = artifacts.require("MapSimpleV2b");
 const MapSimpleV2c = artifacts.require("MapSimpleV2c");
-
-const INDENT = "      ";
 
 contract("MapSimple", function(accounts) {
   let proxy,
@@ -21,8 +19,9 @@ contract("MapSimple", function(accounts) {
     mapSimpleV2 = await MapSimpleV2.new();
     mapSimpleV2b = await MapSimpleV2b.new();
     mapSimpleV2c = await MapSimpleV2c.new();
-    proxy = await Proxy.new(mapSimpleV1.address);
-    mapSimpleV1byProxy = MapSimpleV1.at(proxy.address);
+    let pi = await createProxyInfo(mapSimpleV1);
+    proxy = pi.proxy;
+    mapSimpleV1byProxy = pi.contract;
     mapSimpleV2bbyProxy = MapSimpleV2b.at(proxy.address);
     mapSimpleV2cbyProxy = MapSimpleV2c.at(proxy.address);
     await mapSimpleV1byProxy.initialize();

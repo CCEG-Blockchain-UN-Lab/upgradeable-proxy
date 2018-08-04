@@ -1,8 +1,7 @@
+const createOwnableProxyInfo = require("./helpers/createOwnableProxyInfo");
 const OwnableProxy = artifacts.require("OwnableProxy");
 const UintOwnableV1 = artifacts.require("UintOwnableV1");
 const UintOwnableV2 = artifacts.require("UintOwnableV2");
-
-const INDENT = "      ";
 
 contract("UintOwnable", function(accounts) {
   let ownableProxy, uintOwnableV1, uintOwnableV2, uintOwnableV1byProxy;
@@ -12,8 +11,9 @@ contract("UintOwnable", function(accounts) {
   beforeEach(async function() {
     uintOwnableV1 = await UintOwnableV1.new();
     uintOwnableV2 = await UintOwnableV2.new();
-    ownableProxy = await OwnableProxy.new(uintOwnableV1.address);
-    uintOwnableV1byProxy = UintOwnableV1.at(ownableProxy.address);
+    let pi = await createOwnableProxyInfo(uintOwnableV1);
+    ownableProxy = pi.proxy;
+    uintOwnableV1byProxy = pi.contract;
     await uintOwnableV1byProxy.initialize();
   });
 

@@ -1,10 +1,8 @@
-const Proxy = artifacts.require("Proxy");
+const createProxyInfo = require("./helpers/createProxyInfo");
 const UintFallbackV1 = artifacts.require("UintFallbackV1");
 const UintFallbackV2 = artifacts.require("UintFallbackV2");
 const UintFallbackV3 = artifacts.require("UintFallbackV3");
 const UintFallbackV4 = artifacts.require("UintFallbackV4");
-
-const INDENT = "      ";
 
 contract("UintFallback", function(accounts) {
   let proxy,
@@ -14,18 +12,14 @@ contract("UintFallback", function(accounts) {
     uintFallbackV4,
     uintFallbackbyProxy;
 
-  const inputValue = 10,
-    inputValue2 = 21,
-    inputValue3 = 32,
-    inputValue4 = 43;
-
   beforeEach(async function() {
     uintFallbackV1 = await UintFallbackV1.new();
     uintFallbackV2 = await UintFallbackV2.new();
     uintFallbackV3 = await UintFallbackV3.new();
     uintFallbackV4 = await UintFallbackV4.new();
-    proxy = await Proxy.new(uintFallbackV1.address);
-    uintFallbackbyProxy = UintFallbackV1.at(proxy.address);
+    let pi = await createProxyInfo(uintFallbackV1);
+    proxy = pi.proxy;
+    uintFallbackbyProxy = pi.contract;
     await uintFallbackbyProxy.initialize();
   });
 
@@ -102,7 +96,8 @@ contract("UintFallback", function(accounts) {
   });
 
   it("should be able to pay a payable upgradeable contract's fallback function", async function() {
-    proxy = await Proxy.new(uintFallbackV4.address);
+    let pi = await createProxyInfo(uintFallbackV4);
+    proxy = pi.proxy;
     uintFallbackbyProxy = UintFallbackV1.at(proxy.address);
     await uintFallbackbyProxy.initialize();
 
@@ -116,7 +111,8 @@ contract("UintFallback", function(accounts) {
   });
 
   it("should not be able to pay a non-payable upgradeable contract's fallback function after upgraded from a payable one", async function() {
-    proxy = await Proxy.new(uintFallbackV4.address);
+    let pi = await createProxyInfo(uintFallbackV4);
+    proxy = pi.proxy;
     uintFallbackbyProxy = UintFallbackV1.at(proxy.address);
     await uintFallbackbyProxy.initialize();
 

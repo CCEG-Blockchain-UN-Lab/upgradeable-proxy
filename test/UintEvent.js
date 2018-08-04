@@ -1,4 +1,4 @@
-const Proxy = artifacts.require("Proxy");
+const createProxyInfo = require("./helpers/createProxyInfo");
 const UintEventV1 = artifacts.require("UintEventV1");
 const UintEventV2a_RemovedEvent = artifacts.require(
   "UintEventV2a_RemovedEvent"
@@ -7,8 +7,6 @@ const UintEventV2b_EventReordered = artifacts.require(
   "UintEventV2b_EventReordered"
 );
 
-const INDENT = "      ";
-
 contract("UintEvent", function(accounts) {
   let proxy,
     uintEventV1,
@@ -16,17 +14,15 @@ contract("UintEvent", function(accounts) {
     uintEventV2b_EventReordered,
     uintEventV1byProxy;
 
-  const inputValue = 10,
-    inputValue2 = 21,
-    inputValue3 = 32,
-    inputValue4 = 43;
+  const inputValue = 10;
 
   beforeEach(async function() {
     uintEventV1 = await UintEventV1.new();
     uintEventV2a_RemovedEvent = await UintEventV2a_RemovedEvent.new();
     uintEventV2b_EventReordered = await UintEventV2b_EventReordered.new();
-    proxy = await Proxy.new(uintEventV1.address);
-    uintEventV1byProxy = UintEventV1.at(proxy.address);
+    let pi = await createProxyInfo(uintEventV1);
+    proxy = pi.proxy;
+    uintEventV1byProxy = pi.contract;
     await uintEventV1byProxy.initialize();
   });
 

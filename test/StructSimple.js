@@ -1,4 +1,4 @@
-const Proxy = artifacts.require("Proxy");
+const createProxyInfo = require("./helpers/createProxyInfo");
 const StructSimpleV1 = artifacts.require("StructSimpleV1");
 const StructSimpleV2 = artifacts.require("StructSimpleV2");
 const StructSimpleV2b = artifacts.require("StructSimpleV2b");
@@ -20,8 +20,9 @@ contract("StructSimple", function(accounts) {
     structSimpleV2 = await StructSimpleV2.new();
     structSimpleV2b = await StructSimpleV2b.new();
     structSimpleV2c = await StructSimpleV2c.new();
-    proxy = await Proxy.new(structSimpleV1.address);
-    structSimpleV1byProxy = StructSimpleV1.at(proxy.address);
+    let pi = await createProxyInfo(structSimpleV1);
+    proxy = pi.proxy;
+    structSimpleV1byProxy = pi.contract;
     structSimpleV2bbyProxy = StructSimpleV2b.at(proxy.address);
     await structSimpleV1byProxy.initialize();
   });

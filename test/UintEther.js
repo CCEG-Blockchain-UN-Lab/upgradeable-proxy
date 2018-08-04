@@ -1,9 +1,7 @@
-const Proxy = artifacts.require("Proxy");
+const createProxyInfo = require("./helpers/createProxyInfo");
 const UintEther_Normal = artifacts.require("UintEther_Normal");
 const UintEther_Payable = artifacts.require("UintEther_Payable");
 const UintEther_NotPayable = artifacts.require("UintEther_NotPayable");
-
-const INDENT = "      ";
 
 contract("UintEther", function(accounts) {
   let proxy,
@@ -12,16 +10,12 @@ contract("UintEther", function(accounts) {
     uintEther_NotPayable,
     uintEtherbyProxy;
 
-  const inputValue = 10,
-    inputValue2 = 21,
-    inputValue3 = 32,
-    inputValue4 = 43;
-
   beforeEach(async function() {
     uintEther_Normal = await UintEther_Normal.new();
     uintEther_Payable = await UintEther_Payable.new();
     uintEther_NotPayable = await UintEther_NotPayable.new();
-    proxy = await Proxy.new(uintEther_Normal.address);
+    let pi = await createProxyInfo(uintEther_Normal);
+    proxy = pi.proxy;
     uintEtherbyProxy = UintEther_Payable.at(proxy.address);
     await uintEtherbyProxy.initialize();
   });
@@ -37,8 +31,9 @@ contract("UintEther", function(accounts) {
   });
 
   it("should be able to send Ether to payable function in upgradeable contract that sets value to be the msg.value", async function() {
-    proxy = await Proxy.new(uintEther_Payable.address);
-    uintEtherbyProxy = UintEther_Payable.at(proxy.address);
+    let pi = await createProxyInfo(uintEther_Payable);
+    proxy = pi.proxy;
+    uintEtherbyProxy = pi.contract;
 
     await uintEtherbyProxy.setValue({ value: 300 });
     let value = await uintEtherbyProxy.getValue.call();
@@ -79,7 +74,8 @@ contract("UintEther", function(accounts) {
   });
 
   it("should be able to upgrade from non-payable to payble function", async function() {
-    proxy = await Proxy.new(uintEther_NotPayable.address);
+    let pi = await createProxyInfo(uintEther_NotPayable);
+    proxy = pi.proxy;
     uintEtherbyProxy = UintEther_Payable.at(proxy.address);
     await uintEtherbyProxy.initialize();
 
