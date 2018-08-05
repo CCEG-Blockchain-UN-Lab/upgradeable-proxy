@@ -23,7 +23,6 @@ contract("UpgradeCheck", function(accounts) {
     upgradeCheckV2_CanUpgrade,
     upgradeCheckV2b_CannotUpgrade,
     upgradeCheckV3_CanUpgrade,
-    upgradeCheckbySafeProxy,
     checkContractInstanceByProxyAddress;
 
   beforeEach(async function() {
@@ -39,9 +38,8 @@ contract("UpgradeCheck", function(accounts) {
           UpgradeCheck_CanUpgrade
         ).then(async cnp => {
           safeProxy = cnp.proxy;
-          upgradeCheckbySafeProxy = cnp.proxied;
           upgradeCheck_CanUpgrade = cnp.contract;
-          await upgradeCheckbySafeProxy.initialize();
+          await cnp.proxied.initialize();
         });
       })
     ]);
