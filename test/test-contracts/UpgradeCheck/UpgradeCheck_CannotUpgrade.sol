@@ -1,7 +1,5 @@
 pragma solidity ^0.4.18;
 
-import "../../../contracts/safe/SafeUpgradeable.sol";
-
 contract UpgradeCheck_CannotUpgrade {
     uint value;
 

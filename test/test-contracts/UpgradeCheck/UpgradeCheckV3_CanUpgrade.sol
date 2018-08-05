@@ -1,7 +1,5 @@
 pragma solidity ^0.4.18;
 
-import "../../../contracts/safe/SafeUpgradeable.sol";
-
 contract UpgradeCheckV3_CanUpgrade {
     address public target;
     /*mapping (address => bool) public initialized;*/
