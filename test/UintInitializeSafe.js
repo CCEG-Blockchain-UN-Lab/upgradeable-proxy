@@ -1,18 +1,19 @@
+const deployContractAndSafeProxyFor = require("./helpers/deployContractAndSafeProxyFor");
 const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
-const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
+const CheckContract = artifacts.require("CheckContract");
 const UintInitializeV1a_NotInitialized = artifacts.require(
-  "UintInitializeV1a_NotInitialized"
+  "UintInitializeV1a_NotInitializedSafe"
 );
 const UintInitializeV1b_Initialized = artifacts.require(
-  "UintInitializeV1b_Initialized"
+  "UintInitializeV1b_InitializedSafe"
 );
-const UintInitializeV2 = artifacts.require("UintInitializeV2");
-const UintInitializeV3 = artifacts.require("UintInitializeV3");
+const UintInitializeV2 = artifacts.require("UintInitializeV2Safe");
+const UintInitializeV3 = artifacts.require("UintInitializeV3Safe");
 const web3Abi = require("web3-eth-abi");
 
 const INDENT = "      ";
 
-contract("UintInitialize", function(accounts) {
+contract("UintInitializeSafe", function(accounts) {
   let uintInitializeV1a_NotInitialized,
     uintInitializeV1b_Initialized,
     uintInitializeV2,
@@ -24,13 +25,17 @@ contract("UintInitialize", function(accounts) {
       UintInitializeV1b_Initialized.new(),
       UintInitializeV2.new(),
       UintInitializeV3.new(),
-      deployContractAndProxyFor(UintInitializeV1a_NotInitialized).then(
-        async cnp => {
+      deployOnlyProxyFor(await CheckContract.deployed()).then(async ci => {
+        let checkContractInstanceByProxyAddress = ci.proxied.address;
+        await deployContractAndSafeProxyFor(
+          checkContractInstanceByProxyAddress,
+          UintInitializeV1a_NotInitialized
+        ).then(async cnp => {
           uintInitializebyProxy = cnp.proxied;
           uintInitializeV1a_NotInitialized = cnp.contract;
           await uintInitializebyProxy.initialize();
-        }
-      )
+        });
+      })
     ]);
     uintInitializeV1b_Initialized = result[0];
     uintInitializeV2 = result[1];
