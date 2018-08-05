@@ -3,12 +3,11 @@ pragma solidity ^0.4.18;
 import '../Proxied.sol';
 import './SafeUpgradeable.sol';
 import '../CheckContract.sol';
-import '../Proxy.sol';
 
 contract SafeProxy is Proxied {
 
-    CheckContract checkContract;
-    constructor(address _target, Proxy _checkContractProxy) public {
+    address checkContract;
+    constructor(address _target, address _checkContractProxy) public {
         checkContract = CheckContract(_checkContractProxy);
         upgradeTo(_target);
     }
@@ -52,7 +51,7 @@ contract SafeProxy is Proxied {
      * @return true if the target is a contract
      */
     function isContract(address _target) internal view returns (bool) {
-        return checkContract.isContract(_target);
+        return CheckContract(checkContract).call(bytes4(keccak256("isContract(address)")), _target);
     }
 
     /*
