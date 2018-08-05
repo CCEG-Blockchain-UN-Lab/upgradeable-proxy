@@ -1,6 +1,8 @@
-import "../../../contracts/Upgradeable.sol";
+pragma solidity ^0.4.18;
 
-contract UintInheritedV1 is Upgradeable {
+import "../../../contracts/safe/SafeUpgradeable.sol";
+
+contract UintInheritedV1Safe is SafeUpgradeable {
     uint value;
 
     function getValue() view public returns (uint) {
