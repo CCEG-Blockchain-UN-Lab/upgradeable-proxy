@@ -16,30 +16,3 @@ contract UintEventV1 is Upgradeable {
         value = _value;
     }
 }
-
-contract UintEventV2a_RemovedEvent is Upgradeable {
-    uint value;
-
-    function getValue() view public returns (uint) {
-        return value;
-    }
-
-    function setValue(uint _value) public {
-        value = _value;
-    }
-}
-
-contract UintEventV2b_EventReordered is Upgradeable {
-    uint value;
-    event EventValueChanged2(uint newValue2);
-    event EventValueChanged(uint newValue);
-
-    function getValue() view public returns (uint) {
-        return value;
-    }
-
-    function setValue(uint _value) public {
-        EventValueChanged(_value);
-        value = _value;
-    }
-}
