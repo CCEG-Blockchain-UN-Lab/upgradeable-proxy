@@ -5,14 +5,13 @@ const UintInheritedV2 = artifacts.require("UintInheritedV2");
 const INDENT = "      ";
 
 contract("UintInherited", function(accounts) {
-  let proxy, uintInheritedV1, uintInheritedV2, uintInheritedV1byProxy;
+  let uintInheritedV1, uintInheritedV2, uintInheritedV1byProxy;
 
   const inputValue = 10;
 
   beforeEach(async function() {
     uintInheritedV2 = await UintInheritedV2.new();
     let cnp = await deployContractAndProxyFor(UintInheritedV1);
-    proxy = cnp.proxy;
     uintInheritedV1byProxy = cnp.proxied;
     uintInheritedV1 = cnp.contract;
     await uintInheritedV1byProxy.initialize();

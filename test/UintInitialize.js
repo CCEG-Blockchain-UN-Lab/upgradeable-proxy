@@ -13,8 +13,7 @@ const web3Abi = require("web3-eth-abi");
 const INDENT = "      ";
 
 contract("UintInitialize", function(accounts) {
-  let proxy,
-    uintInitializeV1a_NotInitialized,
+  let uintInitializeV1a_NotInitialized,
     uintInitializeV1b_Initialized,
     uintInitializeV2,
     uintInitializebyProxy;
@@ -25,7 +24,6 @@ contract("UintInitialize", function(accounts) {
     uintInitializeV3 = await UintInitializeV3.new();
 
     let cnp = await deployContractAndProxyFor(UintInitializeV1a_NotInitialized);
-    proxy = cnp.proxy;
     uintInitializebyProxy = cnp.proxied;
     uintInitializeV1a_NotInitialized = cnp.contract;
     await uintInitializebyProxy.initialize();
@@ -43,7 +41,6 @@ contract("UintInitialize", function(accounts) {
 
   it("should be initialize if the variable is set in initialize()", async function() {
     let pi = await deployOnlyProxyFor(uintInitializeV1b_Initialized);
-    proxy = pi.proxy;
     uintInitializebyProxy = pi.proxied;
     await uintInitializebyProxy.initialize();
 
@@ -65,7 +62,7 @@ contract("UintInitialize", function(accounts) {
 
   it("should emmit EventInitialized when calling initialize()", async function() {
     let pi = await deployOnlyProxyFor(uintInitializeV1a_NotInitialized);
-    proxy = pi.proxy;
+    let proxy = pi.proxy;
     uintInitializebyProxy = pi.proxied;
     let initializationTx = await uintInitializebyProxy.initialize();
     let events = initializationTx.logs;

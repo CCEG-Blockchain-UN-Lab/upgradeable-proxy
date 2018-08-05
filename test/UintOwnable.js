@@ -3,7 +3,7 @@ const UintOwnableV1 = artifacts.require("UintOwnableV1");
 const UintOwnableV2 = artifacts.require("UintOwnableV2");
 
 contract("UintOwnable", function(accounts) {
-  let ownableProxy, uintOwnableV1, uintOwnableV2, uintOwnableV1byProxy;
+  let uintOwnableV1, uintOwnableV2, uintOwnableV1byProxy;
 
   const inputValue = 10;
 
@@ -11,7 +11,6 @@ contract("UintOwnable", function(accounts) {
     uintOwnableV2 = await UintOwnableV2.new();
     let cnp = await deployOwnableContractAndProxyFor(UintOwnableV1);
     uintOwnableV1 = cnp.contract;
-    ownableProxy = cnp.proxy;
     uintOwnableV1byProxy = cnp.proxied;
     await uintOwnableV1byProxy.initialize();
   });

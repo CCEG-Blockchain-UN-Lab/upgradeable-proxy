@@ -1,4 +1,4 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const UintSimpleModularV1_Logic = artifacts.require(
   "UintSimpleModularV1_Logic"
 );
@@ -9,19 +9,15 @@ const UintSimpleModularV2_Logic = artifacts.require(
 const INDENT = "      ";
 
 contract("UintSimpleModular", function(accounts) {
-  let proxy,
-    uintSimpleModularV1,
-    uintSimpleModularV2,
-    uintSimpleModular_byProxy;
+  let uintSimpleModularV1, uintSimpleModularV2, uintSimpleModular_byProxy;
 
   const inputValue = 10;
 
   beforeEach(async function() {
-    uintSimpleModularV1 = await UintSimpleModularV1_Logic.new();
     uintSimpleModularV2 = await UintSimpleModularV2_Logic.new();
-    let pi = await deployOnlyProxyFor(uintSimpleModularV1);
-    proxy = pi.proxy;
-    uintSimpleModular_byProxy = pi.proxied;
+    let cnp = await deployContractAndProxyFor(UintSimpleModularV1_Logic);
+    uintSimpleModular_byProxy = cnp.proxied;
+    uintSimpleModularV1 = cnp.contract;
     await uintSimpleModular_byProxy.initialize();
   });
 

@@ -5,7 +5,7 @@ const DoubleUintV2a_NewStorage = artifacts.require("DoubleUintV2a_NewStorage");
 const INDENT = "      ";
 
 contract("DoubleUint", function(accounts) {
-  let proxy, doubleUintV2a_NewStorage, doubleUintV1byProxy;
+  let doubleUintV2a_NewStorage, doubleUintV1byProxy;
 
   const inputValue = 10,
     inputValue2 = 21,
@@ -15,7 +15,6 @@ contract("DoubleUint", function(accounts) {
   beforeEach(async function() {
     doubleUintV2a_NewStorage = await DoubleUintV2a_NewStorage.new();
     let cnp = await deployContractAndProxyFor(DoubleUintV1);
-    proxy = cnp.proxy;
     doubleUintV1byProxy = cnp.proxied;
     await doubleUintV1byProxy.initialize();
   });

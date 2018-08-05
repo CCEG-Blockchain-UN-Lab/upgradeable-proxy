@@ -3,7 +3,7 @@ const StringSimpleV1 = artifacts.require("StringSimpleV1");
 const StringSimpleV2 = artifacts.require("StringSimpleV2");
 
 contract("StringSimple", function(accounts) {
-  let proxy, stringSimpleV2, stringSimpleV1byProxy;
+  let stringSimpleV2, stringSimpleV1byProxy;
 
   const inputValue = "I am a new string",
     inputValue2 = "I am a different string";
@@ -11,7 +11,6 @@ contract("StringSimple", function(accounts) {
   beforeEach(async function() {
     stringSimpleV2 = await StringSimpleV2.new();
     let cnp = await deployContractAndProxyFor(StringSimpleV1);
-    proxy = cnp.proxy;
     stringSimpleV1byProxy = cnp.proxied;
     await stringSimpleV1byProxy.initialize();
   });

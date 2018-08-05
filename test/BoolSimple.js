@@ -3,12 +3,11 @@ const BoolSimpleV1 = artifacts.require("BoolSimpleV1");
 const BoolSimpleV2 = artifacts.require("BoolSimpleV2");
 
 contract("BoolSimple", function(accounts) {
-  let proxy, boolSimpleV2, boolSimpleV1byProxy;
+  let boolSimpleV2, boolSimpleV1byProxy;
 
   beforeEach(async function() {
     boolSimpleV2 = await BoolSimpleV2.new();
     let cnp = await deployContractAndProxyFor(BoolSimpleV1);
-    proxy = cnp.proxy;
     boolSimpleV1byProxy = cnp.proxied;
     await boolSimpleV1byProxy.initialize();
   });

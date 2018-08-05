@@ -1,7 +1,6 @@
 const deployOnlySafeProxyFor = require("./helpers/deployOnlySafeProxyFor");
 const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const CheckContract = artifacts.require("CheckContract");
-const SafeProxy = artifacts.require("SafeProxy");
 const UpgradeCheck_CanUpgrade = artifacts.require("UpgradeCheck_CanUpgrade");
 const UpgradeCheck_CannotUpgrade = artifacts.require(
   "UpgradeCheck_CannotUpgrade"
@@ -15,8 +14,6 @@ const UpgradeCheckV2b_CannotUpgrade = artifacts.require(
 const UpgradeCheckV3_CanUpgrade = artifacts.require(
   "UpgradeCheckV3_CanUpgrade"
 );
-
-const INDENT = "      ";
 
 contract("UpgradeCheck", function(accounts) {
   let safeProxy,

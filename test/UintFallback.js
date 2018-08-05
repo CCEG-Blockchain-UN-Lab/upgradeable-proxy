@@ -6,8 +6,7 @@ const UintFallbackV3 = artifacts.require("UintFallbackV3");
 const UintFallbackV4 = artifacts.require("UintFallbackV4");
 
 contract("UintFallback", function(accounts) {
-  let proxy,
-    uintFallbackV1,
+  let uintFallbackV1,
     uintFallbackV2,
     uintFallbackV3,
     uintFallbackV4,
@@ -18,7 +17,6 @@ contract("UintFallback", function(accounts) {
     uintFallbackV3 = await UintFallbackV3.new();
     uintFallbackV4 = await UintFallbackV4.new();
     let cnp = await deployContractAndProxyFor(UintFallbackV1);
-    proxy = cnp.proxy;
     uintFallbackbyProxy = cnp.proxied;
     uintFallbackV1 = cnp.contract;
     await uintFallbackbyProxy.initialize();
@@ -98,7 +96,7 @@ contract("UintFallback", function(accounts) {
 
   it("should be able to pay a payable upgradeable contract's fallback function", async function() {
     let pi = await deployOnlyProxyFor(uintFallbackV4);
-    proxy = pi.proxy;
+    let proxy = pi.proxy;
     uintFallbackbyProxy = UintFallbackV1.at(proxy.address);
     await uintFallbackbyProxy.initialize();
 
@@ -113,7 +111,7 @@ contract("UintFallback", function(accounts) {
 
   it("should not be able to pay a non-payable upgradeable contract's fallback function after upgraded from a payable one", async function() {
     let pi = await deployOnlyProxyFor(uintFallbackV4);
-    proxy = pi.proxy;
+    let proxy = pi.proxy;
     uintFallbackbyProxy = UintFallbackV1.at(proxy.address);
     await uintFallbackbyProxy.initialize();
 

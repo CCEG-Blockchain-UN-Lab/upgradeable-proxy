@@ -8,8 +8,7 @@ const UintEventV2b_EventReordered = artifacts.require(
 );
 
 contract("UintEvent", function(accounts) {
-  let proxy,
-    uintEventV2a_RemovedEvent,
+  let uintEventV2a_RemovedEvent,
     uintEventV2b_EventReordered,
     uintEventV1byProxy;
 
@@ -19,7 +18,6 @@ contract("UintEvent", function(accounts) {
     uintEventV2a_RemovedEvent = await UintEventV2a_RemovedEvent.new();
     uintEventV2b_EventReordered = await UintEventV2b_EventReordered.new();
     let cnp = await deployContractAndProxyFor(UintEventV1);
-    proxy = cnp.proxy;
     uintEventV1byProxy = cnp.proxied;
     await uintEventV1byProxy.initialize();
   });

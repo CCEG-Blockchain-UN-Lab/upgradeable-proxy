@@ -1,20 +1,19 @@
-const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
 const UintSimpleV1 = artifacts.require("UintSimpleV1");
 const UintSimpleV2 = artifacts.require("UintSimpleV2");
 
 const INDENT = "      ";
 
 contract("UintSimple", function(accounts) {
-  let proxy, uintSimpleV1, uintSimpleV2, uintSimpleV1byProxy;
+  let uintSimpleV1, uintSimpleV2, uintSimpleV1byProxy;
 
   const inputValue = 10;
 
   beforeEach(async function() {
-    uintSimpleV1 = await UintSimpleV1.new();
     uintSimpleV2 = await UintSimpleV2.new();
-    let pi = await deployOnlyProxyFor(uintSimpleV1);
-    proxy = pi.proxy;
-    uintSimpleV1byProxy = pi.proxied;
+    let cnp = await deployContractAndProxyFor(UintSimpleV1);
+    uintSimpleV1byProxy = cnp.proxied;
+    uintSimpleV1 = cnp.contract;
     await uintSimpleV1byProxy.initialize();
   });
 

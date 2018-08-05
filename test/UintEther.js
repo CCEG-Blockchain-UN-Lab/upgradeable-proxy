@@ -28,9 +28,7 @@ contract("UintEther", function(accounts) {
 
   it("should be able to send Ether to payable function in upgradeable contract that sets value to be the msg.value", async function() {
     let pi = await deployOnlyProxyFor(uintEther_Payable);
-    proxy = pi.proxy;
     uintEtherbyProxy = pi.proxied;
-
     await uintEtherbyProxy.setValue({ value: 300 });
     let value = await uintEtherbyProxy.getValue.call();
     assert.equal(
