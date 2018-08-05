@@ -1,5 +1,6 @@
-const deployOnlySafeProxyFor = require("./helpers/deployOnlySafeProxyFor");
+const deployContractAndSafeProxyFor = require("./helpers/deployContractAndSafeProxyFor");
 const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const deployOnlySafeProxyFor = require("./helpers/deployOnlySafeProxyFor");
 const CheckContract = artifacts.require("CheckContract");
 const UpgradeCheck_CanUpgrade = artifacts.require("UpgradeCheck_CanUpgrade");
 const UpgradeCheck_CannotUpgrade = artifacts.require(
@@ -27,29 +28,27 @@ contract("UpgradeCheck", function(accounts) {
 
   beforeEach(async function() {
     let result = await Promise.all([
-      UpgradeCheck_CanUpgrade.new(),
       UpgradeCheck_CannotUpgrade.new(),
       UpgradeCheckV2_CanUpgrade.new(),
       UpgradeCheckV2b_CannotUpgrade.new(),
       UpgradeCheckV3_CanUpgrade.new(),
-      deployOnlyProxyFor(await CheckContract.deployed()).then(ci => {
+      deployOnlyProxyFor(await CheckContract.deployed()).then(async ci => {
         checkContractInstanceByProxyAddress = ci.proxied.address;
+        await deployContractAndSafeProxyFor(
+          checkContractInstanceByProxyAddress,
+          UpgradeCheck_CanUpgrade
+        ).then(async cnp => {
+          safeProxy = cnp.proxy;
+          upgradeCheckbySafeProxy = cnp.proxied;
+          upgradeCheck_CanUpgrade = cnp.contract;
+          await upgradeCheckbySafeProxy.initialize();
+        });
       })
     ]);
-    upgradeCheck_CanUpgrade = result[0];
-    upgradeCheck_CannotUpgrade = result[1];
-    upgradeCheckV2_CanUpgrade = result[2];
-    upgradeCheckV2b_CannotUpgrade = result[3];
-    upgradeCheckV3_CanUpgrade = result[4];
-
-    await deployOnlySafeProxyFor(
-      checkContractInstanceByProxyAddress,
-      upgradeCheck_CanUpgrade
-    ).then(async canUpgradeProxyInfo => {
-      safeProxy = canUpgradeProxyInfo.proxy;
-      upgradeCheckbySafeProxy = canUpgradeProxyInfo.contract;
-      await upgradeCheckbySafeProxy.initialize();
-    });
+    upgradeCheck_CannotUpgrade = result[0];
+    upgradeCheckV2_CanUpgrade = result[1];
+    upgradeCheckV2b_CannotUpgrade = result[2];
+    upgradeCheckV3_CanUpgrade = result[3];
   });
 
   it("should be able to deploy SafeProxy with upgradeable contract target", async function() {

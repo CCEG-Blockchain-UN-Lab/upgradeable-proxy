@@ -1,16 +1,12 @@
-const SafeProxy = artifacts.require("SafeProxy");
+const genericDeployOnlySafeProxyFor = require("./genericDeployOnlySafeProxyFor");
 
 module.exports = async (
   checkContractInstanceByProxyAddress,
-  contratInstanceToProxy
+  contractInstanceToProxy
 ) => {
-  let safeProxy = await SafeProxy.new(
-    contratInstanceToProxy.address,
-    checkContractInstanceByProxyAddress
+  return genericDeployOnlySafeProxyFor(
+    "SafeProxy",
+    checkContractInstanceByProxyAddress,
+    contractInstanceToProxy
   );
-  let proxiedContractInstance = contratInstanceToProxy.constructor.at(
-    safeProxy.address
-  );
-
-  return { proxy: safeProxy, contract: proxiedContractInstance };
 };
