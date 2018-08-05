@@ -1,8 +1,8 @@
 pragma solidity ^0.4.18;
 
-import "../../../contracts/Upgradeable.sol";
+import "../../../contracts/safe/SafeUpgradeable.sol";
 
-contract DoubleUintV2a_NewStorage is Upgradeable {
+contract DoubleUintV2a_NewStorageSafe is SafeUpgradeable {
     uint value2;
     uint value;
 
