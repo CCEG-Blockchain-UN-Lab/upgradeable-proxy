@@ -1,4 +1,7 @@
 const deployContractAndProxyFor = require("./helpers/deployContractAndProxyFor");
+const deployContractAndSafeProxyFor = require("./helpers/deployContractAndSafeProxyFor");
+const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
+const CheckContract = artifacts.require("CheckContract");
 const AddressSimpleV1 = artifacts.require("AddressSimpleV1");
 const AddressSimpleV2 = artifacts.require("AddressSimpleV2");
 
@@ -14,8 +17,17 @@ contract("AddressSimple", function(accounts) {
       deployContractAndProxyFor(AddressSimpleV1).then(async cnp => {
         addressSimpleV1byProxy = cnp.proxied;
         await addressSimpleV1byProxy.initialize();
-        target = await addressSimpleV1byProxy.target();
       })
+      // TODO: As The following code does not work, there is strong evidence there is a bug at Safe Upgradeable smart contracts.
+      // deployOnlyProxyFor(await CheckContract.deployed()).then(async ci => {
+      //   let checkContractInstanceByProxyAddress = ci.proxied.address;
+      //   await deployContractAndSafeProxyFor(
+      //     checkContractInstanceByProxyAddress,
+      //     AddressSimpleV1
+      //   ).then(async cnp => {
+      //     await cnp.proxied.initialize();
+      //   });
+      // })
     ]);
     addressSimpleV2 = result[0];
   });
