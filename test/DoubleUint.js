@@ -15,13 +15,12 @@ contract("DoubleUint", function(accounts) {
   beforeEach(async function() {
     let result = await Promise.all([
       DoubleUintV2a_NewStorage.new(),
-      deployContractAndProxyFor(DoubleUintV1)
+      deployContractAndProxyFor(DoubleUintV1).then(async cnp => {
+        doubleUintV1byProxy = cnp.proxied;
+        await doubleUintV1byProxy.initialize();
+      })
     ]);
     doubleUintV2a_NewStorage = result[0];
-    let cnp = result[1];
-
-    doubleUintV1byProxy = cnp.proxied;
-    await doubleUintV1byProxy.initialize();
   });
 
   it("should upgrade the contract DoubleUint to version 2 with variables in reverse order", async function() {

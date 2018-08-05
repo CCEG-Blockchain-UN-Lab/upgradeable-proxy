@@ -18,18 +18,17 @@ contract("MapSimple", function(accounts) {
       MapSimpleV2.new(),
       MapSimpleV2b.new(),
       MapSimpleV2c.new(),
-      deployContractAndProxyFor(MapSimpleV1)
+      deployContractAndProxyFor(MapSimpleV1).then(async cnp => {
+        proxy = cnp.proxy;
+        mapSimpleV1byProxy = cnp.proxied;
+        mapSimpleV2bbyProxy = MapSimpleV2b.at(proxy.address);
+        mapSimpleV2cbyProxy = MapSimpleV2c.at(proxy.address);
+        await mapSimpleV1byProxy.initialize();
+      })
     ]);
     mapSimpleV2 = result[0];
     mapSimpleV2b = result[1];
     mapSimpleV2c = result[2];
-    let cnp = result[3];
-
-    proxy = cnp.proxy;
-    mapSimpleV1byProxy = cnp.proxied;
-    mapSimpleV2bbyProxy = MapSimpleV2b.at(proxy.address);
-    mapSimpleV2cbyProxy = MapSimpleV2c.at(proxy.address);
-    await mapSimpleV1byProxy.initialize();
   });
 
   it("should be able to upgrade to new map function", async function() {

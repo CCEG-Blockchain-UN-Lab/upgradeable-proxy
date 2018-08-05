@@ -16,14 +16,13 @@ contract("UintSimpleModular", function(accounts) {
   beforeEach(async function() {
     let result = await Promise.all([
       UintSimpleModularV2_Logic.new(),
-      deployContractAndProxyFor(UintSimpleModularV1_Logic)
+      deployContractAndProxyFor(UintSimpleModularV1_Logic).then(async cnp => {
+        uintSimpleModular_byProxy = cnp.proxied;
+        uintSimpleModularV1 = cnp.contract;
+        await uintSimpleModular_byProxy.initialize();
+      })
     ]);
     uintSimpleModularV2 = result[0];
-    let cnp = result[1];
-
-    uintSimpleModular_byProxy = cnp.proxied;
-    uintSimpleModularV1 = cnp.contract;
-    await uintSimpleModular_byProxy.initialize();
   });
 
   it("should be able to use UintSimple_V1 like any contract", async function() {

@@ -28,17 +28,16 @@ contract("ChangeType", function(accounts) {
       ChangeType_Bool.new(),
       ChangeType_String.new(),
       ChangeType_Bytes32.new(),
-      deployContractAndProxyFor(ChangeType_Uint)
+      deployContractAndProxyFor(ChangeType_Uint).then(async cnp => {
+        proxy = cnp.proxy;
+        changeTypebyProxy = cnp.proxied;
+        await changeTypebyProxy.initialize();
+      })
     ]);
     changeType_Uint8 = result[0];
     changeType_Bool = result[1];
     changeType_String = result[2];
     changeType_Bytes32 = result[3];
-    let cnp = result[4];
-
-    proxy = cnp.proxy;
-    changeTypebyProxy = cnp.proxied;
-    await changeTypebyProxy.initialize();
   });
 
   it("should be able to upgrade uint to uint8 with 1", async function() {

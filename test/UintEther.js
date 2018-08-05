@@ -11,15 +11,14 @@ contract("UintEther", function(accounts) {
     let result = await Promise.all([
       UintEther_Payable.new(),
       UintEther_NotPayable.new(),
-      deployContractAndProxyFor(UintEther_Normal)
+      deployContractAndProxyFor(UintEther_Normal).then(async cnp => {
+        proxy = cnp.proxy;
+        uintEtherbyProxy = UintEther_Payable.at(proxy.address);
+        await uintEtherbyProxy.initialize();
+      })
     ]);
     uintEther_Payable = result[0];
     uintEther_NotPayable = result[1];
-    let cnp = result[2];
-
-    proxy = cnp.proxy;
-    uintEtherbyProxy = UintEther_Payable.at(proxy.address);
-    await uintEtherbyProxy.initialize();
   });
 
   it("should be able to send Ether to payable function in upgradeable contract", async function() {

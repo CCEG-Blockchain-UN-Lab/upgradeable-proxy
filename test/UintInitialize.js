@@ -16,6 +16,7 @@ contract("UintInitialize", function(accounts) {
   let uintInitializeV1a_NotInitialized,
     uintInitializeV1b_Initialized,
     uintInitializeV2,
+    uintInitializeV3,
     uintInitializebyProxy;
 
   beforeEach(async function() {
@@ -23,16 +24,17 @@ contract("UintInitialize", function(accounts) {
       UintInitializeV1b_Initialized.new(),
       UintInitializeV2.new(),
       UintInitializeV3.new(),
-      deployContractAndProxyFor(UintInitializeV1a_NotInitialized)
+      deployContractAndProxyFor(UintInitializeV1a_NotInitialized).then(
+        async cnp => {
+          uintInitializebyProxy = cnp.proxied;
+          uintInitializeV1a_NotInitialized = cnp.contract;
+          await uintInitializebyProxy.initialize();
+        }
+      )
     ]);
     uintInitializeV1b_Initialized = result[0];
     uintInitializeV2 = result[1];
     uintInitializeV3 = result[2];
-    let cnp = result[3];
-
-    uintInitializebyProxy = cnp.proxied;
-    uintInitializeV1a_NotInitialized = cnp.contract;
-    await uintInitializebyProxy.initialize();
   });
 
   it("should not initialize if the variable is set in the contract", async function() {

@@ -17,16 +17,15 @@ contract("UintFallback", function(accounts) {
       UintFallbackV2.new(),
       UintFallbackV3.new(),
       UintFallbackV4.new(),
-      deployContractAndProxyFor(UintFallbackV1)
+      deployContractAndProxyFor(UintFallbackV1).then(async cnp => {
+        uintFallbackbyProxy = cnp.proxied;
+        uintFallbackV1 = cnp.contract;
+        await uintFallbackbyProxy.initialize();
+      })
     ]);
     uintFallbackV2 = result[0];
     uintFallbackV3 = result[1];
     uintFallbackV4 = result[2];
-    let cnp = result[3];
-
-    uintFallbackbyProxy = cnp.proxied;
-    uintFallbackV1 = cnp.contract;
-    await uintFallbackbyProxy.initialize();
   });
 
   it("should be able to send upgrade the contract's fallback function to set new value", async function() {

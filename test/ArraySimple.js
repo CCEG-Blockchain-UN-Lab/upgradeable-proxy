@@ -30,20 +30,20 @@ contract("ArraySimple", function(accounts) {
       ArraySimpleV2a.new(),
       ArraySimpleV2a_ExtraValue.new(),
       ArraySimpleV2b.new(),
-      deployContractAndProxyFor(ArraySimpleV1a)
+      deployContractAndProxyFor(ArraySimpleV1a).then(async cnp => {
+        proxy = cnp.proxy;
+        arraySimplebyProxy = cnp.proxied;
+        arraySimpleV1a = cnp.contract;
+        arraySimpleV2a_ExtraValuebyProxy = ArraySimpleV2a_ExtraValue.at(
+          proxy.address
+        );
+        await arraySimplebyProxy.initialize();
+      })
     ]);
     arraySimpleV1b = result[0];
     arraySimpleV2a = result[1];
     arraySimpleV2a_ExtraValue = result[2];
     arraySimpleV2b = result[3];
-    let cnp = result[4];
-    proxy = cnp.proxy;
-    arraySimplebyProxy = cnp.proxied;
-    arraySimpleV1a = cnp.contract;
-    arraySimpleV2a_ExtraValuebyProxy = ArraySimpleV2a_ExtraValue.at(
-      proxy.address
-    );
-    await arraySimplebyProxy.initialize();
   });
 
   function parseBigNumberArray(bnArray) {

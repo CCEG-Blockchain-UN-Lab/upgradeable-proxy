@@ -18,14 +18,13 @@ contract("UintEvent", function(accounts) {
     let result = await Promise.all([
       UintEventV2a_RemovedEvent.new(),
       UintEventV2b_EventReordered.new(),
-      deployContractAndProxyFor(UintEventV1)
+      deployContractAndProxyFor(UintEventV1).then(async cnp => {
+        uintEventV1byProxy = cnp.proxied;
+        await uintEventV1byProxy.initialize();
+      })
     ]);
     uintEventV2a_RemovedEvent = result[0];
     uintEventV2b_EventReordered = result[1];
-    let cnp = result[2];
-
-    uintEventV1byProxy = cnp.proxied;
-    await uintEventV1byProxy.initialize();
   });
 
   it("should upgrade the contract UintEvent to version 2a with event removed", async function() {

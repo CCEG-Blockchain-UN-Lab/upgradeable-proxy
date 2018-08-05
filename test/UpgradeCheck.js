@@ -32,24 +32,24 @@ contract("UpgradeCheck", function(accounts) {
       UpgradeCheckV2_CanUpgrade.new(),
       UpgradeCheckV2b_CannotUpgrade.new(),
       UpgradeCheckV3_CanUpgrade.new(),
-      deployOnlyProxyFor(await CheckContract.deployed())
+      deployOnlyProxyFor(await CheckContract.deployed()).then(ci => {
+        checkContractInstanceByProxyAddress = ci.proxied.address;
+      })
     ]);
     upgradeCheck_CanUpgrade = result[0];
     upgradeCheck_CannotUpgrade = result[1];
     upgradeCheckV2_CanUpgrade = result[2];
     upgradeCheckV2b_CannotUpgrade = result[3];
     upgradeCheckV3_CanUpgrade = result[4];
-    let ci = result[5];
 
-    checkContractInstanceByProxyAddress = ci.proxied.address;
-
-    let canUpgradeProxyInfo = await deployOnlySafeProxyFor(
+    await deployOnlySafeProxyFor(
       checkContractInstanceByProxyAddress,
       upgradeCheck_CanUpgrade
-    );
-    safeProxy = canUpgradeProxyInfo.proxy;
-    upgradeCheckbySafeProxy = canUpgradeProxyInfo.contract;
-    await upgradeCheckbySafeProxy.initialize();
+    ).then(async canUpgradeProxyInfo => {
+      safeProxy = canUpgradeProxyInfo.proxy;
+      upgradeCheckbySafeProxy = canUpgradeProxyInfo.contract;
+      await upgradeCheckbySafeProxy.initialize();
+    });
   });
 
   it("should be able to deploy SafeProxy with upgradeable contract target", async function() {

@@ -10,14 +10,13 @@ contract("UintOwnable", function(accounts) {
   beforeEach(async function() {
     let result = await Promise.all([
       UintOwnableV2.new(),
-      deployOwnableContractAndProxyFor(UintOwnableV1)
+      deployOwnableContractAndProxyFor(UintOwnableV1).then(async cnp => {
+        uintOwnableV1 = cnp.contract;
+        uintOwnableV1byProxy = cnp.proxied;
+        await uintOwnableV1byProxy.initialize();
+      })
     ]);
     uintOwnableV2 = result[0];
-    let cnp = result[1];
-
-    uintOwnableV1 = cnp.contract;
-    uintOwnableV1byProxy = cnp.proxied;
-    await uintOwnableV1byProxy.initialize();
   });
 
   it("should upgrade the contract UintOwnable to version 2 with different logic", async function() {

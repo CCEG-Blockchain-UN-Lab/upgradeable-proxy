@@ -12,14 +12,13 @@ contract("UintSimple", function(accounts) {
   beforeEach(async function() {
     let result = await Promise.all([
       UintSimpleV2.new(),
-      deployContractAndProxyFor(UintSimpleV1)
+      deployContractAndProxyFor(UintSimpleV1).then(async cnp => {
+        uintSimpleV1byProxy = cnp.proxied;
+        uintSimpleV1 = cnp.contract;
+        await uintSimpleV1byProxy.initialize();
+      })
     ]);
     uintSimpleV2 = result[0];
-    let cnp = result[1];
-
-    uintSimpleV1byProxy = cnp.proxied;
-    uintSimpleV1 = cnp.contract;
-    await uintSimpleV1byProxy.initialize();
   });
 
   it("should upgrade the contract UintSimple to version 2 with different logic", async function() {

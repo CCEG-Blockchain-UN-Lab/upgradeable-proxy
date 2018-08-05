@@ -153,7 +153,60 @@ contract("UintAdvanced", function(accounts) {
       UintAdvancedV2w_ChangeReturn.new(),
       UintAdvancedV2x_Overloaded.new(),
       UintAdvancedV2y_Overloaded.new(),
-      deployContractAndProxyFor(UintAdvancedV1)
+      deployContractAndProxyFor(UintAdvancedV1).then(async cnp => {
+        proxy = cnp.proxy;
+        uintAdvancedV1byProxy = cnp.proxied;
+        uintAdvancedV1 = cnp.contract;
+        uintAdvancedV2a_NewFunctionbyProxy = UintAdvancedV2a_NewFunction.at(
+          proxy.address
+        );
+        uintAdvancedV2c_NewEventbyProxy = UintAdvancedV2c_NewEvent.at(
+          proxy.address
+        );
+        uintAdvancedV2i_NewFunctionbyProxy = UintAdvancedV2i_NewFunction.at(
+          proxy.address
+        );
+        uintAdvancedV2m_NewStoragebyProxy = UintAdvancedV2m_NewStorage.at(
+          proxy.address
+        );
+        uintAdvancedV2n_ChangeReturnbyProxy = UintAdvancedV2n_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2o_ChangeReturnbyProxy = UintAdvancedV2o_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2p_ChangeReturnbyProxy = UintAdvancedV2p_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2q_ChangeReturnbyProxy = UintAdvancedV2q_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2r_ChangeReturnbyProxy = UintAdvancedV2r_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2s_ChangeReturnbyProxy = UintAdvancedV2s_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2t_ChangeReturnbyProxy = UintAdvancedV2t_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2u_ChangeReturnbyProxy = UintAdvancedV2u_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2v_ChangeReturnbyProxy = UintAdvancedV2v_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2w_ChangeReturnbyProxy = UintAdvancedV2w_ChangeReturn.at(
+          proxy.address
+        );
+        uintAdvancedV2x_OverloadedbyProxy = UintAdvancedV2x_Overloaded.at(
+          proxy.address
+        );
+        uintAdvancedV2y_OverloadedbyProxy = UintAdvancedV2y_Overloaded.at(
+          proxy.address
+        );
+        await uintAdvancedV1byProxy.initialize();
+      })
     ]);
     uintAdvancedV2a_NewFunction = result[0];
     uintAdvancedV2b_NewStorage = result[1];
@@ -180,62 +233,6 @@ contract("UintAdvanced", function(accounts) {
     uintAdvancedV2w_ChangeReturn = result[22];
     uintAdvancedV2x_Overloaded = result[23];
     uintAdvancedV2y_Overloaded = result[24];
-    let cnp = result[25];
-
-    proxy = cnp.proxy;
-    uintAdvancedV1byProxy = cnp.proxied;
-    uintAdvancedV1 = cnp.contract;
-
-    uintAdvancedV2a_NewFunctionbyProxy = UintAdvancedV2a_NewFunction.at(
-      proxy.address
-    );
-    uintAdvancedV2c_NewEventbyProxy = UintAdvancedV2c_NewEvent.at(
-      proxy.address
-    );
-    uintAdvancedV2i_NewFunctionbyProxy = UintAdvancedV2i_NewFunction.at(
-      proxy.address
-    );
-    uintAdvancedV2m_NewStoragebyProxy = UintAdvancedV2m_NewStorage.at(
-      proxy.address
-    );
-    uintAdvancedV2n_ChangeReturnbyProxy = UintAdvancedV2n_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2o_ChangeReturnbyProxy = UintAdvancedV2o_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2p_ChangeReturnbyProxy = UintAdvancedV2p_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2q_ChangeReturnbyProxy = UintAdvancedV2q_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2r_ChangeReturnbyProxy = UintAdvancedV2r_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2s_ChangeReturnbyProxy = UintAdvancedV2s_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2t_ChangeReturnbyProxy = UintAdvancedV2t_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2u_ChangeReturnbyProxy = UintAdvancedV2u_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2v_ChangeReturnbyProxy = UintAdvancedV2v_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2w_ChangeReturnbyProxy = UintAdvancedV2w_ChangeReturn.at(
-      proxy.address
-    );
-    uintAdvancedV2x_OverloadedbyProxy = UintAdvancedV2x_Overloaded.at(
-      proxy.address
-    );
-    uintAdvancedV2y_OverloadedbyProxy = UintAdvancedV2y_Overloaded.at(
-      proxy.address
-    );
-
-    await uintAdvancedV1byProxy.initialize();
   });
 
   describe("test adding new functions to the contract", () => {

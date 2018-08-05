@@ -11,13 +11,12 @@ contract("StringSimple", function(accounts) {
   beforeEach(async function() {
     let result = await Promise.all([
       StringSimpleV2.new(),
-      deployContractAndProxyFor(StringSimpleV1)
+      deployContractAndProxyFor(StringSimpleV1).then(async cnp => {
+        stringSimpleV1byProxy = cnp.proxied;
+        await stringSimpleV1byProxy.initialize();
+      })
     ]);
     stringSimpleV2 = result[0];
-    let cnp = result[1];
-
-    stringSimpleV1byProxy = cnp.proxied;
-    await stringSimpleV1byProxy.initialize();
   });
 
   it("should be able to upgrade to new string function", async function() {

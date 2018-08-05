@@ -11,15 +11,13 @@ contract("AddressSimple", function(accounts) {
   beforeEach(async function() {
     let result = await Promise.all([
       AddressSimpleV2.new(),
-      deployContractAndProxyFor(AddressSimpleV1)
+      deployContractAndProxyFor(AddressSimpleV1).then(async cnp => {
+        addressSimpleV1byProxy = cnp.proxied;
+        await addressSimpleV1byProxy.initialize();
+        target = await addressSimpleV1byProxy.target();
+      })
     ]);
     addressSimpleV2 = result[0];
-    let cnp = result[1];
-
-    addressSimpleV1byProxy = cnp.proxied;
-
-    await addressSimpleV1byProxy.initialize();
-    target = await addressSimpleV1byProxy.target();
   });
 
   it("should be able to upgrade to new address function", async function() {

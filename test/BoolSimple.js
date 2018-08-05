@@ -8,13 +8,12 @@ contract("BoolSimple", function(accounts) {
   beforeEach(async function() {
     let result = await Promise.all([
       BoolSimpleV2.new(),
-      deployContractAndProxyFor(BoolSimpleV1)
+      deployContractAndProxyFor(BoolSimpleV1).then(async cnp => {
+        boolSimpleV1byProxy = cnp.proxied;
+        await boolSimpleV1byProxy.initialize();
+      })
     ]);
     boolSimpleV2 = result[0];
-    let cnp = result[1];
-
-    boolSimpleV1byProxy = cnp.proxied;
-    await boolSimpleV1byProxy.initialize();
   });
 
   it("should be able to upgrade to new bool function", async function() {

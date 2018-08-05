@@ -12,14 +12,13 @@ contract("UintInherited", function(accounts) {
   beforeEach(async function() {
     let result = await Promise.all([
       UintInheritedV2.new(),
-      deployContractAndProxyFor(UintInheritedV1)
+      deployContractAndProxyFor(UintInheritedV1).then(async cnp => {
+        uintInheritedV1byProxy = cnp.proxied;
+        uintInheritedV1 = cnp.contract;
+        await uintInheritedV1byProxy.initialize();
+      })
     ]);
     uintInheritedV2 = result[0];
-    let cnp = result[1];
-
-    uintInheritedV1byProxy = cnp.proxied;
-    uintInheritedV1 = cnp.contract;
-    await uintInheritedV1byProxy.initialize();
   });
 
   it("should upgrade the contract UintInherited to version 2 with different logic", async function() {

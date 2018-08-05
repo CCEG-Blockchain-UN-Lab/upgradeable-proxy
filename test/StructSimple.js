@@ -19,17 +19,16 @@ contract("StructSimple", function(accounts) {
       StructSimpleV2.new(),
       StructSimpleV2b.new(),
       StructSimpleV2c.new(),
-      deployContractAndProxyFor(StructSimpleV1)
+      deployContractAndProxyFor(StructSimpleV1).then(async cnp => {
+        proxy = cnp.proxy;
+        structSimpleV1byProxy = cnp.proxied;
+        structSimpleV2bbyProxy = StructSimpleV2b.at(proxy.address);
+        await structSimpleV1byProxy.initialize();
+      })
     ]);
     structSimpleV2 = result[0];
     structSimpleV2b = result[1];
     structSimpleV2c = result[2];
-    let cnp = result[3];
-
-    proxy = cnp.proxy;
-    structSimpleV1byProxy = cnp.proxied;
-    structSimpleV2bbyProxy = StructSimpleV2b.at(proxy.address);
-    await structSimpleV1byProxy.initialize();
   });
 
   function parseReturnTuple(value) {
