@@ -1,8 +1,8 @@
 pragma solidity ^0.4.18;
 
-import "../../../contracts/Upgradeable.sol";
+import "../../../contracts/safe/SafeUpgradeable.sol";
 
-contract UintEther_NotPayable is Upgradeable {
+contract UintEther_NotPayableSafe is SafeUpgradeable {
     uint value;
 
     function getValue() view public returns (uint) {
