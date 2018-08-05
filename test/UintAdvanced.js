@@ -127,33 +127,61 @@ contract("UintAdvanced", function(accounts) {
     inputValue3 = 32;
 
   beforeEach(async function() {
-    uintAdvancedV2a_NewFunction = await UintAdvancedV2a_NewFunction.new();
-    uintAdvancedV2b_NewStorage = await UintAdvancedV2b_NewStorage.new();
-    uintAdvancedV2c_NewEvent = await UintAdvancedV2c_NewEvent.new();
-    uintAdvancedV2d_ReverseFunctionOrder = await UintAdvancedV2d_ReverseFunctionOrder.new();
-    uintAdvancedV2e_NewStorage = await UintAdvancedV2e_NewStorage.new();
-    uintAdvancedV2f_NewStorage = await UintAdvancedV2f_NewStorage.new();
-    uintAdvancedV2g_OverrideFunctionGetter = await UintAdvancedV2g_OverrideFunctionGetter.new();
-    uintAdvancedV2h_OverrideFunctionSetter = await UintAdvancedV2h_OverrideFunctionSetter.new();
-    uintAdvancedV2i_NewFunction = await UintAdvancedV2i_NewFunction.new();
-    uintAdvancedV2j_ChangeVisibility = await UintAdvancedV2j_ChangeVisibility.new();
-    uintAdvancedV2k_ChangeVisibility = await UintAdvancedV2k_ChangeVisibility.new();
-    uintAdvancedV2l_ChangeKeyword = await UintAdvancedV2l_ChangeKeyword.new();
-    uintAdvancedV2m_NewStorage = await UintAdvancedV2m_NewStorage.new();
-    uintAdvancedV2n_ChangeReturn = await UintAdvancedV2n_ChangeReturn.new();
-    uintAdvancedV2o_ChangeReturn = await UintAdvancedV2o_ChangeReturn.new();
-    uintAdvancedV2p_ChangeReturn = await UintAdvancedV2p_ChangeReturn.new();
-    uintAdvancedV2q_ChangeReturn = await UintAdvancedV2q_ChangeReturn.new();
-    uintAdvancedV2r_ChangeReturn = await UintAdvancedV2r_ChangeReturn.new();
-    uintAdvancedV2s_ChangeReturn = await UintAdvancedV2s_ChangeReturn.new();
-    uintAdvancedV2t_ChangeReturn = await UintAdvancedV2t_ChangeReturn.new();
-    uintAdvancedV2u_ChangeReturn = await UintAdvancedV2u_ChangeReturn.new();
-    uintAdvancedV2v_ChangeReturn = await UintAdvancedV2v_ChangeReturn.new();
-    uintAdvancedV2w_ChangeReturn = await UintAdvancedV2w_ChangeReturn.new();
-    uintAdvancedV2x_Overloaded = await UintAdvancedV2x_Overloaded.new();
-    uintAdvancedV2y_Overloaded = await UintAdvancedV2y_Overloaded.new();
+    let result = await Promise.all([
+      UintAdvancedV2a_NewFunction.new(),
+      UintAdvancedV2b_NewStorage.new(),
+      UintAdvancedV2c_NewEvent.new(),
+      UintAdvancedV2d_ReverseFunctionOrder.new(),
+      UintAdvancedV2e_NewStorage.new(),
+      UintAdvancedV2f_NewStorage.new(),
+      UintAdvancedV2g_OverrideFunctionGetter.new(),
+      UintAdvancedV2h_OverrideFunctionSetter.new(),
+      UintAdvancedV2i_NewFunction.new(),
+      UintAdvancedV2j_ChangeVisibility.new(),
+      UintAdvancedV2k_ChangeVisibility.new(),
+      UintAdvancedV2l_ChangeKeyword.new(),
+      UintAdvancedV2m_NewStorage.new(),
+      UintAdvancedV2n_ChangeReturn.new(),
+      UintAdvancedV2o_ChangeReturn.new(),
+      UintAdvancedV2p_ChangeReturn.new(),
+      UintAdvancedV2q_ChangeReturn.new(),
+      UintAdvancedV2r_ChangeReturn.new(),
+      UintAdvancedV2s_ChangeReturn.new(),
+      UintAdvancedV2t_ChangeReturn.new(),
+      UintAdvancedV2u_ChangeReturn.new(),
+      UintAdvancedV2v_ChangeReturn.new(),
+      UintAdvancedV2w_ChangeReturn.new(),
+      UintAdvancedV2x_Overloaded.new(),
+      UintAdvancedV2y_Overloaded.new(),
+      deployContractAndProxyFor(UintAdvancedV1)
+    ]);
+    uintAdvancedV2a_NewFunction = result[0];
+    uintAdvancedV2b_NewStorage = result[1];
+    uintAdvancedV2c_NewEvent = result[2];
+    uintAdvancedV2d_ReverseFunctionOrder = result[3];
+    uintAdvancedV2e_NewStorage = result[4];
+    uintAdvancedV2f_NewStorage = result[5];
+    uintAdvancedV2g_OverrideFunctionGetter = result[6];
+    uintAdvancedV2h_OverrideFunctionSetter = result[7];
+    uintAdvancedV2i_NewFunction = result[8];
+    uintAdvancedV2j_ChangeVisibility = result[9];
+    uintAdvancedV2k_ChangeVisibility = result[10];
+    uintAdvancedV2l_ChangeKeyword = result[11];
+    uintAdvancedV2m_NewStorage = result[12];
+    uintAdvancedV2n_ChangeReturn = result[13];
+    uintAdvancedV2o_ChangeReturn = result[14];
+    uintAdvancedV2p_ChangeReturn = result[15];
+    uintAdvancedV2q_ChangeReturn = result[16];
+    uintAdvancedV2r_ChangeReturn = result[17];
+    uintAdvancedV2s_ChangeReturn = result[18];
+    uintAdvancedV2t_ChangeReturn = result[19];
+    uintAdvancedV2u_ChangeReturn = result[20];
+    uintAdvancedV2v_ChangeReturn = result[21];
+    uintAdvancedV2w_ChangeReturn = result[22];
+    uintAdvancedV2x_Overloaded = result[23];
+    uintAdvancedV2y_Overloaded = result[24];
+    let cnp = result[25];
 
-    let cnp = await deployContractAndProxyFor(UintAdvancedV1);
     proxy = cnp.proxy;
     uintAdvancedV1byProxy = cnp.proxied;
     uintAdvancedV1 = cnp.contract;

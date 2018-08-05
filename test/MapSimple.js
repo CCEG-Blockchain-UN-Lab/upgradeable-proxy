@@ -14,10 +14,17 @@ contract("MapSimple", function(accounts) {
     mapSimpleV2cbyProxy;
 
   beforeEach(async function() {
-    mapSimpleV2 = await MapSimpleV2.new();
-    mapSimpleV2b = await MapSimpleV2b.new();
-    mapSimpleV2c = await MapSimpleV2c.new();
-    let cnp = await deployContractAndProxyFor(MapSimpleV1);
+    let result = await Promise.all([
+      MapSimpleV2.new(),
+      MapSimpleV2b.new(),
+      MapSimpleV2c.new(),
+      deployContractAndProxyFor(MapSimpleV1)
+    ]);
+    mapSimpleV2 = result[0];
+    mapSimpleV2b = result[1];
+    mapSimpleV2c = result[2];
+    let cnp = result[3];
+
     proxy = cnp.proxy;
     mapSimpleV1byProxy = cnp.proxied;
     mapSimpleV2bbyProxy = MapSimpleV2b.at(proxy.address);

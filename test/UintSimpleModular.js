@@ -14,8 +14,13 @@ contract("UintSimpleModular", function(accounts) {
   const inputValue = 10;
 
   beforeEach(async function() {
-    uintSimpleModularV2 = await UintSimpleModularV2_Logic.new();
-    let cnp = await deployContractAndProxyFor(UintSimpleModularV1_Logic);
+    let result = await Promise.all([
+      UintSimpleModularV2_Logic.new(),
+      deployContractAndProxyFor(UintSimpleModularV1_Logic)
+    ]);
+    uintSimpleModularV2 = result[0];
+    let cnp = result[1];
+
     uintSimpleModular_byProxy = cnp.proxied;
     uintSimpleModularV1 = cnp.contract;
     await uintSimpleModular_byProxy.initialize();

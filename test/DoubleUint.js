@@ -13,8 +13,13 @@ contract("DoubleUint", function(accounts) {
     inputValue4 = 43;
 
   beforeEach(async function() {
-    doubleUintV2a_NewStorage = await DoubleUintV2a_NewStorage.new();
-    let cnp = await deployContractAndProxyFor(DoubleUintV1);
+    let result = await Promise.all([
+      DoubleUintV2a_NewStorage.new(),
+      deployContractAndProxyFor(DoubleUintV1)
+    ]);
+    doubleUintV2a_NewStorage = result[0];
+    let cnp = result[1];
+
     doubleUintV1byProxy = cnp.proxied;
     await doubleUintV1byProxy.initialize();
   });

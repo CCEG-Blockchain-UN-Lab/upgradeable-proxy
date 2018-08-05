@@ -6,8 +6,13 @@ contract("BoolSimple", function(accounts) {
   let boolSimpleV2, boolSimpleV1byProxy;
 
   beforeEach(async function() {
-    boolSimpleV2 = await BoolSimpleV2.new();
-    let cnp = await deployContractAndProxyFor(BoolSimpleV1);
+    let result = await Promise.all([
+      BoolSimpleV2.new(),
+      deployContractAndProxyFor(BoolSimpleV1)
+    ]);
+    boolSimpleV2 = result[0];
+    let cnp = result[1];
+
     boolSimpleV1byProxy = cnp.proxied;
     await boolSimpleV1byProxy.initialize();
   });

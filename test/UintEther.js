@@ -8,9 +8,15 @@ contract("UintEther", function(accounts) {
   let proxy, uintEther_Payable, uintEther_NotPayable, uintEtherbyProxy;
 
   beforeEach(async function() {
-    uintEther_Payable = await UintEther_Payable.new();
-    uintEther_NotPayable = await UintEther_NotPayable.new();
-    let cnp = await deployContractAndProxyFor(UintEther_Normal);
+    let result = await Promise.all([
+      UintEther_Payable.new(),
+      UintEther_NotPayable.new(),
+      deployContractAndProxyFor(UintEther_Normal)
+    ]);
+    uintEther_Payable = result[0];
+    uintEther_NotPayable = result[1];
+    let cnp = result[2];
+
     proxy = cnp.proxy;
     uintEtherbyProxy = UintEther_Payable.at(proxy.address);
     await uintEtherbyProxy.initialize();

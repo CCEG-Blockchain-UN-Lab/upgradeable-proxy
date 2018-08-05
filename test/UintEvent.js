@@ -15,9 +15,15 @@ contract("UintEvent", function(accounts) {
   const inputValue = 10;
 
   beforeEach(async function() {
-    uintEventV2a_RemovedEvent = await UintEventV2a_RemovedEvent.new();
-    uintEventV2b_EventReordered = await UintEventV2b_EventReordered.new();
-    let cnp = await deployContractAndProxyFor(UintEventV1);
+    let result = await Promise.all([
+      UintEventV2a_RemovedEvent.new(),
+      UintEventV2b_EventReordered.new(),
+      deployContractAndProxyFor(UintEventV1)
+    ]);
+    uintEventV2a_RemovedEvent = result[0];
+    uintEventV2b_EventReordered = result[1];
+    let cnp = result[2];
+
     uintEventV1byProxy = cnp.proxied;
     await uintEventV1byProxy.initialize();
   });

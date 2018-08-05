@@ -9,8 +9,13 @@ contract("StringSimple", function(accounts) {
     inputValue2 = "I am a different string";
 
   beforeEach(async function() {
-    stringSimpleV2 = await StringSimpleV2.new();
-    let cnp = await deployContractAndProxyFor(StringSimpleV1);
+    let result = await Promise.all([
+      StringSimpleV2.new(),
+      deployContractAndProxyFor(StringSimpleV1)
+    ]);
+    stringSimpleV2 = result[0];
+    let cnp = result[1];
+
     stringSimpleV1byProxy = cnp.proxied;
     await stringSimpleV1byProxy.initialize();
   });

@@ -8,8 +8,13 @@ contract("UintOwnable", function(accounts) {
   const inputValue = 10;
 
   beforeEach(async function() {
-    uintOwnableV2 = await UintOwnableV2.new();
-    let cnp = await deployOwnableContractAndProxyFor(UintOwnableV1);
+    let result = await Promise.all([
+      UintOwnableV2.new(),
+      deployOwnableContractAndProxyFor(UintOwnableV1)
+    ]);
+    uintOwnableV2 = result[0];
+    let cnp = result[1];
+
     uintOwnableV1 = cnp.contract;
     uintOwnableV1byProxy = cnp.proxied;
     await uintOwnableV1byProxy.initialize();

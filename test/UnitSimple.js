@@ -10,8 +10,13 @@ contract("UintSimple", function(accounts) {
   const inputValue = 10;
 
   beforeEach(async function() {
-    uintSimpleV2 = await UintSimpleV2.new();
-    let cnp = await deployContractAndProxyFor(UintSimpleV1);
+    let result = await Promise.all([
+      UintSimpleV2.new(),
+      deployContractAndProxyFor(UintSimpleV1)
+    ]);
+    uintSimpleV2 = result[0];
+    let cnp = result[1];
+
     uintSimpleV1byProxy = cnp.proxied;
     uintSimpleV1 = cnp.contract;
     await uintSimpleV1byProxy.initialize();

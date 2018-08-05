@@ -31,19 +31,17 @@ contract("UpgradeCheck", function(accounts) {
       UpgradeCheck_CannotUpgrade.new(),
       UpgradeCheckV2_CanUpgrade.new(),
       UpgradeCheckV2b_CannotUpgrade.new(),
-      UpgradeCheckV3_CanUpgrade.new()
+      UpgradeCheckV3_CanUpgrade.new(),
+      deployOnlyProxyFor(await CheckContract.deployed())
     ]);
     upgradeCheck_CanUpgrade = result[0];
     upgradeCheck_CannotUpgrade = result[1];
     upgradeCheckV2_CanUpgrade = result[2];
     upgradeCheckV2b_CannotUpgrade = result[3];
     upgradeCheckV3_CanUpgrade = result[4];
+    let ci = result[5];
 
-    let checkContractProxyInfo = await deployOnlyProxyFor(
-      await CheckContract.deployed()
-    );
-    checkContractInstanceByProxyAddress =
-      checkContractProxyInfo.proxied.address;
+    checkContractInstanceByProxyAddress = ci.proxied.address;
 
     let canUpgradeProxyInfo = await deployOnlySafeProxyFor(
       checkContractInstanceByProxyAddress,

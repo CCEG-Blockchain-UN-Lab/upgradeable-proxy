@@ -15,10 +15,17 @@ contract("StructSimple", function(accounts) {
     structSimpleV2bbyProxy;
 
   beforeEach(async function() {
-    structSimpleV2 = await StructSimpleV2.new();
-    structSimpleV2b = await StructSimpleV2b.new();
-    structSimpleV2c = await StructSimpleV2c.new();
-    let cnp = await deployContractAndProxyFor(StructSimpleV1);
+    let result = await Promise.all([
+      StructSimpleV2.new(),
+      StructSimpleV2b.new(),
+      StructSimpleV2c.new(),
+      deployContractAndProxyFor(StructSimpleV1)
+    ]);
+    structSimpleV2 = result[0];
+    structSimpleV2b = result[1];
+    structSimpleV2c = result[2];
+    let cnp = result[3];
+
     proxy = cnp.proxy;
     structSimpleV1byProxy = cnp.proxied;
     structSimpleV2bbyProxy = StructSimpleV2b.at(proxy.address);

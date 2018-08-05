@@ -23,11 +23,19 @@ contract("ChangeType", function(accounts) {
     changeTypebyProxy;
 
   beforeEach(async function() {
-    changeType_Uint8 = await ChangeType_Uint8.new();
-    changeType_Bool = await ChangeType_Bool.new();
-    changeType_String = await ChangeType_String.new();
-    changeType_Bytes32 = await ChangeType_Bytes32.new();
-    let cnp = await deployContractAndProxyFor(ChangeType_Uint);
+    let result = await Promise.all([
+      ChangeType_Uint8.new(),
+      ChangeType_Bool.new(),
+      ChangeType_String.new(),
+      ChangeType_Bytes32.new(),
+      deployContractAndProxyFor(ChangeType_Uint)
+    ]);
+    changeType_Uint8 = result[0];
+    changeType_Bool = result[1];
+    changeType_String = result[2];
+    changeType_Bytes32 = result[3];
+    let cnp = result[4];
+
     proxy = cnp.proxy;
     changeTypebyProxy = cnp.proxied;
     await changeTypebyProxy.initialize();

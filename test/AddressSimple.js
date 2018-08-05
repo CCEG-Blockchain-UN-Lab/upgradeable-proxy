@@ -9,8 +9,13 @@ contract("AddressSimple", function(accounts) {
     inputValue2 = "0x5c28D962c93282C6Fbe820f9AB33844D96b4853e";
 
   beforeEach(async function() {
-    addressSimpleV2 = await AddressSimpleV2.new();
-    let cnp = await deployContractAndProxyFor(AddressSimpleV1);
+    let result = await Promise.all([
+      AddressSimpleV2.new(),
+      deployContractAndProxyFor(AddressSimpleV1)
+    ]);
+    addressSimpleV2 = result[0];
+    let cnp = result[1];
+
     addressSimpleV1byProxy = cnp.proxied;
 
     await addressSimpleV1byProxy.initialize();

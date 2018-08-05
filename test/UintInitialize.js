@@ -19,11 +19,17 @@ contract("UintInitialize", function(accounts) {
     uintInitializebyProxy;
 
   beforeEach(async function() {
-    uintInitializeV1b_Initialized = await UintInitializeV1b_Initialized.new();
-    uintInitializeV2 = await UintInitializeV2.new();
-    uintInitializeV3 = await UintInitializeV3.new();
+    let result = await Promise.all([
+      UintInitializeV1b_Initialized.new(),
+      UintInitializeV2.new(),
+      UintInitializeV3.new(),
+      deployContractAndProxyFor(UintInitializeV1a_NotInitialized)
+    ]);
+    uintInitializeV1b_Initialized = result[0];
+    uintInitializeV2 = result[1];
+    uintInitializeV3 = result[2];
+    let cnp = result[3];
 
-    let cnp = await deployContractAndProxyFor(UintInitializeV1a_NotInitialized);
     uintInitializebyProxy = cnp.proxied;
     uintInitializeV1a_NotInitialized = cnp.contract;
     await uintInitializebyProxy.initialize();

@@ -25,11 +25,18 @@ contract("ArraySimple", function(accounts) {
     inputValues2 = [12, 23, 34];
 
   beforeEach(async function() {
-    arraySimpleV1b = await ArraySimpleV1b.new();
-    arraySimpleV2a = await ArraySimpleV2a.new();
-    arraySimpleV2a_ExtraValue = await ArraySimpleV2a_ExtraValue.new();
-    arraySimpleV2b = await ArraySimpleV2b.new();
-    let cnp = await deployContractAndProxyFor(ArraySimpleV1a);
+    let result = await Promise.all([
+      ArraySimpleV1b.new(),
+      ArraySimpleV2a.new(),
+      ArraySimpleV2a_ExtraValue.new(),
+      ArraySimpleV2b.new(),
+      deployContractAndProxyFor(ArraySimpleV1a)
+    ]);
+    arraySimpleV1b = result[0];
+    arraySimpleV2a = result[1];
+    arraySimpleV2a_ExtraValue = result[2];
+    arraySimpleV2b = result[3];
+    let cnp = result[4];
     proxy = cnp.proxy;
     arraySimplebyProxy = cnp.proxied;
     arraySimpleV1a = cnp.contract;

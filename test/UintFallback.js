@@ -13,10 +13,17 @@ contract("UintFallback", function(accounts) {
     uintFallbackbyProxy;
 
   beforeEach(async function() {
-    uintFallbackV2 = await UintFallbackV2.new();
-    uintFallbackV3 = await UintFallbackV3.new();
-    uintFallbackV4 = await UintFallbackV4.new();
-    let cnp = await deployContractAndProxyFor(UintFallbackV1);
+    let result = await Promise.all([
+      UintFallbackV2.new(),
+      UintFallbackV3.new(),
+      UintFallbackV4.new(),
+      deployContractAndProxyFor(UintFallbackV1)
+    ]);
+    uintFallbackV2 = result[0];
+    uintFallbackV3 = result[1];
+    uintFallbackV4 = result[2];
+    let cnp = result[3];
+
     uintFallbackbyProxy = cnp.proxied;
     uintFallbackV1 = cnp.contract;
     await uintFallbackbyProxy.initialize();

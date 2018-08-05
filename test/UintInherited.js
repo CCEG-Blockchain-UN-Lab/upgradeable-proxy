@@ -10,8 +10,13 @@ contract("UintInherited", function(accounts) {
   const inputValue = 10;
 
   beforeEach(async function() {
-    uintInheritedV2 = await UintInheritedV2.new();
-    let cnp = await deployContractAndProxyFor(UintInheritedV1);
+    let result = await Promise.all([
+      UintInheritedV2.new(),
+      deployContractAndProxyFor(UintInheritedV1)
+    ]);
+    uintInheritedV2 = result[0];
+    let cnp = result[1];
+
     uintInheritedV1byProxy = cnp.proxied;
     uintInheritedV1 = cnp.contract;
     await uintInheritedV1byProxy.initialize();
