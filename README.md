@@ -81,13 +81,13 @@ truffle test
 ### 3.1 The upgrade mechanism
 
 The three main contracts that are used in the upgradeable proxy pattern are:
-1. [Proxied.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Proxied.sol)
-2. [Proxy.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Proxy.sol)
-3. [Upgradeable.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Upgradeable.sol)
+1. [Proxied.sol](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/contracts/Proxied.sol)
+2. [Proxy.sol](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/contracts/Proxy.sol)
+3. [Upgradeable.sol](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/contracts/Upgradeable.sol)
 
 Please see in-code contract and function descriptions for how these contracts allow you to make an upgradeable smart contract. The below diagram shows how the function execution flow (steps 1-4) and how the contract is upgraded (steps 5-7):
 
-![Upgradeable](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/diagram1.jpg)
+![Upgradeable](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/diagram1.jpg)
 
 Understanding the [DELEGATECALL](https://solidity.readthedocs.io/en/develop/introduction-to-smart-contracts.html#delegatecall-callcode-and-libraries) Ethereum opcode is key to understanding the upgradeable proxy pattern.
 
@@ -136,7 +136,7 @@ contract UintSimpleV2 is Upgradeable {
 #### 3.2.2 A modular smart contract design
 See tests for contracts _UintSimpleModular_
 
-See [UintSimpleModular.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/test/UintSimpleModular.sol)
+See [UintSimpleModular.sol](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/contracts/test/UintSimpleModular.sol)
 
 **Characteristics:**
 - Forces strict ordering of state variables
@@ -282,13 +282,13 @@ Experimental safety features were implemented to the upgradeable pattern to prot
 * one of the safety features depends on the use of the EXTCODESIZE opcode which *may not work after the Serenity hard fork*.
 * carefully consider if these safety features are necessary, *onced deployed they cannot be changed*.
 
-The safe upgradeable proxy pattern can be found in [/contracts/safe/](https://github.com/jackandtheblockstalk/upgradeable-proxy/tree/master/contracts/safe). See _UpgraeableCheck_ contracts for test.
+The safe upgradeable proxy pattern can be found in [/contracts/safe/](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/tree/master/contracts/safe). See _UpgraeableCheck_ contracts for test.
 
 ### 3.6 Creating a permissioned (Ownable) proxy upgrade
 
 The upgradeable proxy pattern was combined with the Zepplin [Ownable](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) contract standard to allow for the upgradeTo() function to only be called by the administrator (owner). The administrator of the proxy can be set as a multisig or DAO-like contract to provide distributed governance.
 
-The permissioned upgradeable contracts can be seen in the [/contracts/ownable](https://github.com/jackandtheblockstalk/upgradeable-proxy/tree/master/contracts/ownable) folder. Please see _UintOwnable_ contract tests for details.
+The permissioned upgradeable contracts can be seen in the [/contracts/ownable](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/tree/master/contracts/ownable) folder. Please see _UintOwnable_ contract tests for details.
 
 If appropriate, the ownable and safe features can be combined.
 
