@@ -17,7 +17,7 @@ npm install upgradeable-proxy
 Imagine you have the first version of a contract called UintSimpleV1 with this [code](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/test/test-contracts/UintSimple/UintSimpleV1.sol).
 But instead importing from the relative path you import directly from the npm package that was just installed:
 ```javascript
-import "upgradeable-proxy-plus/contracts/UpgradeablePlus.sol";
+import "upgradeable-proxy/contracts/Upgradeable.sol";
 ```
 
 To deploy use the following strategy:
@@ -40,7 +40,7 @@ let bigNumValue = await uintSimpleV1byProxy.getValue.call();
 And now you want to update to a second version of the contract called UintSimpleV2 with this [code](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/test/test-contracts/UintSimple/UintSimpleV2.sol).
 But instead importing from the relative path you import directly from the npm package that was just installed:
 ```javascript
-import "upgradeable-proxy-plus/contracts/UpgradeablePlus.sol";
+import "upgradeable-proxy/contracts/Upgradeable.sol";
 ```
 
 So next step is to deploy the second version of the contract first, then upgrade and finally initialize the proxy.
@@ -70,7 +70,7 @@ As noted in the article, **implementing an upgradeable smart contract requires a
 ## 2. Running the tests
 
 ```
-git clone https://github.com/jackandtheblockstalk/upgradeable-proxy
+git clone https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy.git
 cd upgradeable-proxy
 npm install
 truffle test
