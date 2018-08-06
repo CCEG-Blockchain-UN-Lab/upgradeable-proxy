@@ -290,7 +290,7 @@ The upgradeable proxy pattern was combined with the Zepplin [Ownable](https://gi
 
 The permissioned upgradeable contracts can be seen in the [/contracts/ownable](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/tree/master/contracts/ownable) folder. Please see _UintOwnable_ contract tests for details.
 
-If appropriate, the ownable and safe features can be combined.
+If appropriate, the ownable and safe features can be combined as can be seen in [upgradeable-proxy-plus](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy-plus).
 
 ### 3.6 Solidity compiler compatibility
 
