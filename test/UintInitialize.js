@@ -44,7 +44,7 @@ contract("UintInitialize", function(accounts) {
     );
 
     let value = await uintInitializebyProxy.getValue.call();
-    assert.notEqual(value.toNumber(), 111, "value should not be initialized");
+    assert.equal(value.toNumber(), 0, "value should not be initialized");
   });
 
   it("should be initialize if the variable is set in initialize()", async function() {

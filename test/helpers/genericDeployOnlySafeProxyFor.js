@@ -8,6 +8,8 @@ module.exports = async (
     contractInstanceToProxy.address,
     checkContractInstanceByProxyAddress
   );
+  // const Proxy = artifacts.require("Proxy");
+  // let proxy = await Proxy.new(contractInstanceToProxy.address);
   let proxiedContractInstance = contractInstanceToProxy.constructor.at(
     proxy.address
   );

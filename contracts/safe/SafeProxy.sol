@@ -1,12 +1,11 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.0;
 
-import '../Proxied.sol';
+import './SafeProxied.sol';
 import './SafeUpgradeable.sol';
 import '../CheckContract.sol';
 
-contract SafeProxy is Proxied {
+contract SafeProxy is SafeProxied {
 
-    address checkContract;
     constructor(address _target, address _checkContractProxy) public {
         checkContract = CheckContract(_checkContractProxy);
         upgradeTo(_target);

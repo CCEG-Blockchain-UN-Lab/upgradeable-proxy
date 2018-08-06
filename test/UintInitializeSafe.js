@@ -1,4 +1,5 @@
 const deployContractAndSafeProxyFor = require("./helpers/deployContractAndSafeProxyFor");
+const deployOnlySafeProxyFor = require("./helpers/deployOnlySafeProxyFor");
 const deployOnlyProxyFor = require("./helpers/deployOnlyProxyFor");
 const CheckContract = artifacts.require("CheckContract");
 const UintInitializeV1a_NotInitialized = artifacts.require(
@@ -18,7 +19,8 @@ contract("UintInitializeSafe", function(accounts) {
     uintInitializeV1b_Initialized,
     uintInitializeV2,
     uintInitializeV3,
-    uintInitializebyProxy;
+    uintInitializebyProxy,
+    checkContractInstanceByProxyAddress;
 
   beforeEach(async function() {
     let result = await Promise.all([
@@ -26,7 +28,7 @@ contract("UintInitializeSafe", function(accounts) {
       UintInitializeV2.new(),
       UintInitializeV3.new(),
       deployOnlyProxyFor(await CheckContract.deployed()).then(async ci => {
-        let checkContractInstanceByProxyAddress = ci.proxied.address;
+        checkContractInstanceByProxyAddress = ci.proxied.address;
         await deployContractAndSafeProxyFor(
           checkContractInstanceByProxyAddress,
           UintInitializeV1a_NotInitialized
@@ -49,11 +51,14 @@ contract("UintInitializeSafe", function(accounts) {
     );
 
     let value = await uintInitializebyProxy.getValue.call();
-    assert.notEqual(value.toNumber(), 111, "value should not be initialized");
+    assert.equal(value.toNumber(), 0, "value should not be initialized");
   });
 
   it("should be initialize if the variable is set in initialize()", async function() {
-    let pi = await deployOnlyProxyFor(uintInitializeV1b_Initialized);
+    let pi = await deployOnlySafeProxyFor(
+      checkContractInstanceByProxyAddress,
+      uintInitializeV1b_Initialized
+    );
     uintInitializebyProxy = pi.proxied;
     await uintInitializebyProxy.initialize();
 
@@ -74,7 +79,10 @@ contract("UintInitializeSafe", function(accounts) {
   });
 
   it("should emmit EventInitialized when calling initialize()", async function() {
-    let pi = await deployOnlyProxyFor(uintInitializeV1a_NotInitialized);
+    let pi = await deployOnlySafeProxyFor(
+      checkContractInstanceByProxyAddress,
+      uintInitializeV1a_NotInitialized
+    );
     let proxy = pi.proxy;
     uintInitializebyProxy = pi.proxied;
     let initializationTx = await uintInitializebyProxy.initialize();
