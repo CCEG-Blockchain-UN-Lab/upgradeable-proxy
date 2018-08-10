@@ -54,7 +54,7 @@ module.exports = deployer => {
     /**
      * Deploy a SafeProxy for the just deployed AddressSimpleV1Safe.
      */
-    let proxyPlus = await SafeProxy.new(
+    let safeProxy = await SafeProxy.new(
       addressSimpleV1.address,
       checkContractInstanceByProxy.address
     );
@@ -62,7 +62,7 @@ module.exports = deployer => {
     /**
      * Get the instance of the AddressSimpleV1Safe by proxy, and initialize.
      */
-    let addressSimpleV1byProxy = AddressSimpleV1.at(proxyPlus.address);
+    let addressSimpleV1byProxy = AddressSimpleV1.at(safeProxy.address);
     await addressSimpleV1byProxy.initialize();
 
     /**
