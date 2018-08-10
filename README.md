@@ -14,45 +14,94 @@ npm install upgradeable-proxy
 ```
 
 ## Usage
-Imagine you have the first version of a contract called UintSimpleV1 with this [code](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/test/test-contracts/UintSimple/UintSimpleV1.sol).
-But instead importing from the relative path you import directly from the npm package that was just installed:
+
+### Deploy Upgradeable CheckContract
+Deploy Upgradeable CheckContract so that after Serenity hardfork, the method to check if an address is a contract can be upgraded. More information [here](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/contracts/CheckContract.sol#L13)
 ```javascript
-import "upgradeable-proxy/contracts/Upgradeable.sol";
+let checkContractInstance = await deployer.deploy(CheckContract);
 ```
 
-To deploy use the following strategy:
+### Deploy CheckContract's Proxy.
+Deploy a Proxy for the just deployed CheckContract.
 ```javascript
-let uintSimpleV1 = await UintSimpleV1.new();
-let proxy = await Proxy.new(uintSimpleV1.address);
-let uintSimpleV1byProxy = UintSimpleV1.at(proxy.address);
-await uintSimpleV1byProxy.initialize();
+let proxyInstance = await deployer.deploy(
+  Proxy,
+  checkContractInstance.address
+);
 ```
 
-### Contract interaction
-To interact with the upgradeable contract, then simply call the contract methods like [test](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/test/UnitSimple.js#L25
-) indicates.
+### Get CheckContract's instance by proxy
+Get the instance of the CheckContract by proxy, and initialize.
 ```javascript
-await uintSimpleV1byProxy.setValue(inputValue)
-let bigNumValue = await uintSimpleV1byProxy.getValue.call();
+let checkContractInstanceByProxy = CheckContract.at(proxyInstance.address);
+await checkContractInstanceByProxy.initialize();
 ```
 
-### The upgrade
-And now you want to update to a second version of the contract called UintSimpleV2 with this [code](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/test/test-contracts/UintSimple/UintSimpleV2.sol).
-But instead importing from the relative path you import directly from the npm package that was just installed:
+### Make some tests
+(OPTIONAL) Make some tests to make sure the method isContract called by proxy is properly working.
 ```javascript
-import "upgradeable-proxy/contracts/Upgradeable.sol";
+let testOne = await checkContractInstanceByProxy.isContract.call(
+  checkContractInstanceByProxy.address
+);
+assert.equal(testOne, true);
+let testTwo = await checkContractInstanceByProxy.isContract.call(
+  "0x627306090abab3a6e1400e9345bc60c78a8bef57"
+);
+assert.equal(testTwo, false);
 ```
 
-So next step is to deploy the second version of the contract first, then upgrade and finally initialize the proxy.
+### Deploy the UpgradeablePlus contract
 ```javascript
-let uintSimpleV2 = await UintSimpleV2.new();
-await uintSimpleV1byProxy.upgradeTo(uintSimpleV2.address);
-await uintSimpleV1byProxy.initialize();
+let addressSimpleV1 = await deployer.deploy(AddressSimpleV1);
 ```
 
-Once that is done, the functionality called through the proxy contract will be the updated one.
+### Deploy AddressSimpleV1's SafeProxy
+Deploy a SafeProxy for the just deployed AddressSimpleV1Safe.
+```javascript
+let safeProxy = await SafeProxy.new(
+  addressSimpleV1.address,
+  checkContractInstanceByProxy.address
+);
+```
 
----
+### Get AddressSimpleV1's instance by proxy
+Get the instance of the AddressSimpleV1Safe by proxy, and initialize.
+```javascript
+let addressSimpleV1byProxy = AddressSimpleV1.at(safeProxy.address);
+await addressSimpleV1byProxy.initialize();
+```
+
+### Make some tests
+(OPTIONAL) Make some tests to make sure the UpgradeablePlus contract called by proxy is properly working.
+```javascript
+const inputValue = "0xa4532e9f6f9c4e4abb89bdbb73d3003210ede61c",
+  inputValue2 = "0x5c28D962c93282C6Fbe820f9AB33844D96b4853e";
+await addressSimpleV1byProxy.setValue(inputValue);
+let value = await addressSimpleV1byProxy.getValue.call();
+assert.equal(value, inputValue, "Not equal to inputValue");
+
+let addressSimpleV2 = await deployer.deploy(AddressSimpleV2);
+await addressSimpleV1byProxy.upgradeTo(addressSimpleV2.address);
+await addressSimpleV1byProxy.initialize();
+value = await addressSimpleV1byProxy.getValue.call();
+assert.equal(value, inputValue, "Not equal to inputValue");
+
+await addressSimpleV1byProxy.setValue(inputValue2);
+value = await addressSimpleV1byProxy.getValue.call();
+assert.equal(
+  value,
+  "0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98",
+  "Not equal to constant defined in function"
+);
+```
+
+The full example was written inside migrations and is fully functional [here](https://github.com/CCEG-Blockchain-UN-Lab/upgradeable-proxy/blob/master/migrations/2_deploy_contracts.js).
+
+### How to import these library contracts?
+Use the following strategy to import library contracts to your own contracts
+```javascript
+import "upgradeable-proxy/contracts/safe/SafeUpgradeable.sol";
+```
 
 This repository tests the upgradeable proxy pattern. It is a simplified version of the system being used by the
 [AragonOS](https://github.com/aragon/aragonOS), [Level K](https://github.com/levelkdev/master-storage) and [ZepplinOS](https://github.com/zeppelinos/core) systems. The core upgradeability pattern code has been copied and a few features have been removed.
