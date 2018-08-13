@@ -50,7 +50,7 @@ contract SafeProxy is SafeProxied {
      * @return true if the target is a contract
      */
     function isContract(address _target) internal view returns (bool) {
-        return CheckContract(checkContract).call(bytes4(keccak256("isContract(address)")), _target);
+        return address(CheckContract(checkContract)).call(bytes4(keccak256("isContract(address)")), _target);
     }
 
     /*
@@ -59,7 +59,7 @@ contract SafeProxy is SafeProxied {
      * @returns true if the target address implements the upgradeTo() function
      */
     function isUpgradeable(address _target) internal view returns (bool) {
-        return SafeUpgradeable(_target).call(bytes4(keccak256("upgradeTo(address)")), address(this));
+        return address(SafeUpgradeable(_target)).call(bytes4(keccak256("upgradeTo(address)")), address(this));
     }
 
 }
