@@ -1,12 +1,13 @@
 {
   "name": "upgradeable-proxy",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "This implements https://github.com/jackandtheblockstalk/upgradeable-proxy as a npm package.",
   "main": "truffle.js",
   "directories": {
     "test": "test"
   },
   "dependencies": {
+    "openzeppelin-solidity": "^1.12.0",
     "web3-eth-abi": "^1.0.0-beta.35"
   },
   "devDependencies": {},
